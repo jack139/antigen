@@ -25,10 +25,10 @@ def dataGenerator(data_path,json_path,batch_size=64,target_size = (224,224)):
             ratio_x = 1.0 / j['imageWidth']
             ratio_y = 1.0 / j['imageHeight']
 
-            if j['shapes'][0]['label']=='card' and j['shapes'][1]['label']=='photo':
+            if j['shapes'][0]['label']=='CT' and j['shapes'][1]['label']=='S':
                 p1 = j['shapes'][0]['points']
                 p2 = j['shapes'][1]['points']
-            elif j['shapes'][0]['label']=='photo' and j['shapes'][1]['label']=='card':
+            elif j['shapes'][0]['label']=='S' and j['shapes'][1]['label']=='CT':
                 p1 = j['shapes'][1]['points']
                 p2 = j['shapes'][0]['points']
             else:

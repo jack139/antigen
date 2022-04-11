@@ -14,10 +14,10 @@ from keras.layers import Dense, GlobalAveragePooling2D, Dropout
 
 input_size = (128,128,3) # 对 crop 数据 128就够了
 batch_size = 16
-steps_per_epoch = 100
-epochs = 20
-train_dir = 'data/train'
-test_dir = 'data/dev'
+steps_per_epoch = 20
+epochs = 10
+train_dir = 'data/crop_train'
+test_dir = 'data/crop_dev'
 
 
 # 数据生成器

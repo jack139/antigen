@@ -27,7 +27,7 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=4, target_size=input
 
 # 生成模型
 model_type = 'vgg16'
-model = get_model(model_type, freeze=True)
+model = get_model(model_type, input_size=input_size, freeze=True)
 
 opt = Adam(lr=3e-4)
 model.compile(loss="mse", optimizer=opt, metrics=[IoU, IoU2])
@@ -37,7 +37,7 @@ print(model.summary())
 # train the network for bounding box regression
 print("[INFO] training bounding box regressor...")
 
-ckpt_filepath = "locard_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,steps_per_epoch)
+ckpt_filepath = "locate_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,steps_per_epoch)
 
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
     monitor='val_IoU',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
@@ -57,7 +57,7 @@ train_generator = dataGenerator(train_dir, train_json, batch_size=batch_size, ta
 val_generator = dataGenerator(val_dir, val_json, batch_size=4, target_size=input_size[:2])
 
 # 解冻的模型
-model = get_model(model_type, freeze=False, weights=None)
+model = get_model(model_type, input_size=input_size, freeze=False, weights=None)
 model.load_weights(ckpt_filepath)
 
 model.compile(loss="mse", optimizer=opt, metrics=[IoU, IoU2])

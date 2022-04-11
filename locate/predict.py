@@ -9,11 +9,12 @@ import cv2
 from model import get_model
 from datetime import datetime
 
-json_path = 'data/json'
+input_size = (224,224,3)
+
+json_path = '../data/json'
 
 model = get_model('vgg16', weights=None)
-model.load_weights("locard_vgg16_b32_e10_100_0.94010.h5")
-#model.load_weights("locard_weights_vgg16_b4_e20_1000.h5")
+model.load_weights("locate_vgg16_b16_e10_20_0.82327.h5")
 #model = get_model('densenet', weights=None)
 #model.load_weights('locard_densenet_b32_e10_100_0.82439.h5')
 
@@ -38,10 +39,10 @@ def read_json(test_path):
     ratio_x = 1.0 / j['imageWidth']
     ratio_y = 1.0 / j['imageHeight']
 
-    if j['shapes'][0]['label']=='card' and j['shapes'][1]['label']=='photo':
+    if j['shapes'][0]['label']=='CT' and j['shapes'][1]['label']=='S':
         p1 = j['shapes'][0]['points']
         p2 = j['shapes'][1]['points']
-    elif j['shapes'][0]['label']=='photo' and j['shapes'][1]['label']=='card':
+    elif j['shapes'][0]['label']=='S' and j['shapes'][1]['label']=='CT':
         p1 = j['shapes'][1]['points']
         p2 = j['shapes'][0]['points']
     else:
@@ -115,7 +116,7 @@ if __name__ == '__main__':
         print("usage: python %s <img_path>"%sys.argv[0])
         sys.exit(2)
 
-    inputs, h, w = read_img(sys.argv[1])
+    inputs, h, w = read_img(sys.argv[1], target_size=input_size[:2])
     p1, p2, pred = predict(inputs, h, w)
     draw_box(sys.argv[1], p1, p2)
 
