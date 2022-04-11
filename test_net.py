@@ -5,17 +5,17 @@ os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
-from keras.applications import ResNet50, InceptionResNetV2
+from keras.applications import ResNet50, InceptionResNetV2, VGG16
 from keras.preprocessing import image
 from keras.models import Model
 from keras.optimizers import Adam, SGD
 from keras.layers import Dense, GlobalAveragePooling2D, Dropout
 
 
-input_size = (256,256,3)
+input_size = (128,128,3) # 对 crop 数据 128就够了
 batch_size = 16
 steps_per_epoch = 100
-epochs = 40
+epochs = 20
 train_dir = 'data/train'
 test_dir = 'data/dev'
 
@@ -42,16 +42,17 @@ test_generator = test_datagen.flow_from_directory(
 )
 
 # create the base pre-trained model
-base_model = ResNet50(weights='imagenet', input_shape=input_size, include_top=False)
+base_model = VGG16(weights='imagenet', input_shape=input_size, include_top=False)
+#base_model = ResNet50(weights='imagenet', input_shape=input_size, include_top=False)
 #base_model = InceptionResNetV2(weights='imagenet', input_shape=input_size, include_top=False)
 
 # add a global spatial average pooling layer
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 # let's add a fully-connected layer
-x = Dense(128, activation='relu')(x)
-x = Dropout(0.2)(x)
-x = Dense(32, activation='relu')(x)
+x = Dense(512, activation='relu')(x)
+#x = Dropout(0.2)(x)
+#x = Dense(32, activation='relu')(x)
 # and a logistic layer 
 predictions = Dense(4, activation='softmax')(x)
 
@@ -64,16 +65,16 @@ for layer in base_model.layers:
     layer.trainable = False
 
 # compile the model (should be done *after* setting layers to non-trainable)
-model.compile(optimizer=Adam(lr = 1e-4), loss='categorical_crossentropy', metrics = ['accuracy'])
+model.compile(optimizer=Adam(lr = 1e-4), loss='categorical_crossentropy', metrics = ['categorical_accuracy'])
 
 model.summary()
 
 # train the model on the new data for a few epochs
 model.fit(train_generator,
         steps_per_epoch=steps_per_epoch,
-        epochs=epochs//2,
+        epochs=epochs,
         validation_data=test_generator,
-        validation_steps=500)
+        validation_steps=5)
 
 model.save('batch_%d_epochs_%d_steps_%d_0.hdf5'%(batch_size, epochs, steps_per_epoch))
 
@@ -86,6 +87,8 @@ model.save('batch_%d_epochs_%d_steps_%d_0.hdf5'%(batch_size, epochs, steps_per_e
 for i, layer in enumerate(base_model.layers):
    print(i, layer.name)
 
+print(model.layers)
+
 # we chose to train the top 2 inception blocks, i.e. we will freeze
 # the first 100 layers and unfreeze the rest:
 for layer in model.layers[:100]:
@@ -95,7 +98,7 @@ for layer in model.layers[100:]:
 
 # we need to recompile the model for these modifications to take effect
 # we use SGD with a low learning rate
-model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics = ['accuracy'])
+model.compile(optimizer=SGD(lr=0.0001, momentum=0.9), loss='categorical_crossentropy', metrics = ['categorical_accuracy'])
 
 #model.summary()
 
@@ -105,6 +108,6 @@ model.fit(train_generator,
         steps_per_epoch=steps_per_epoch,
         epochs=epochs,
         validation_data=test_generator,
-        validation_steps=800)
+        validation_steps=5)
 
 model.save('batch_%d_epochs_%d_steps_%d_1.hdf5'%(batch_size, epochs, steps_per_epoch))
