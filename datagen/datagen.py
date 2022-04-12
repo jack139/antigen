@@ -14,12 +14,25 @@ if not path.exists(output_json_folder):
     mkdir(output_json_folder)
 
 # 出现概率
-backgrounds = ["1", "1", "1", "1"]
-backgrounds_p = [0.3, 0.3, 0.3, 0.1]
-characters = ["fal1", "fal1", "fal1", "fal1", "fal1"]
-characters_p = [0.4, 0.3, 0.2, 0.095, 0.005]
-objects = ["none", "hand1-R", "hand1-L", "hand1-U", "hand1-D"]
-objects_p = [0.2, 0.2, 0.2, 0.2, 0.2]
+backgrounds = [
+    "1", "2", "2a", "3", "3a", 
+    "4", "4a", "5", "6", "7", 
+    "8", "5a", "6a", "7a", "8a"
+]
+backgrounds_p = [
+    0.09, 0.09, 0.09, 0.09, 0.09,
+    0.02, 0.02, 0.02, 0.02, 0.02,
+    0.09, 0.09, 0.09, 0.09, 0.09,
+]
+characters = [
+    "neg1", "fal1", "nul1", "pos1",
+    "neg2", "fal2", "nul2", "pos2",
+    "neg3", "fal3", "nul3", "pos3",
+    "neg4", "fal4", "nul4", "pos4",
+]
+characters_p = [0.0625]*16
+objects = ["none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-L"]
+objects_p = [0.4, 0.1, 0.05, 0.1, 0.05, 0.1, 0.1, 0.1]
 angels = [0, 90, 180, 270]
 angels_p = [0.25, 0.25, 0.25, 0.25]
 
@@ -196,6 +209,5 @@ def generate_random_imgs(total_imgs):
 
 
 if __name__ == "__main__":
-    #generate_all_imgs()
-    generate_random_imgs(10)
+    generate_random_imgs(50)
 
