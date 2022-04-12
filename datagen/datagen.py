@@ -2,19 +2,102 @@ from os import path, mkdir
 from PIL import Image
 import numpy as np
 from tqdm import tqdm
+import math
+import json
 
 output_folder = "data/generated"
+output_json_folder = "data/json"
+
 if not path.exists(output_folder):
     mkdir(output_folder)
+if not path.exists(output_json_folder):
+    mkdir(output_json_folder)
 
+# 出现概率
 backgrounds = ["1", "1", "1", "1"]
 backgrounds_p = [0.3, 0.3, 0.3, 0.1]
 characters = ["fal1", "fal1", "fal1", "fal1", "fal1"]
 characters_p = [0.4, 0.3, 0.2, 0.095, 0.005]
-objects = ["none", "hand1"]
-objects_p = [0.5, 0.5]
+objects = ["none", "hand1-R", "hand1-L", "hand1-U", "hand1-D"]
+objects_p = [0.2, 0.2, 0.2, 0.2, 0.2]
 angels = [0, 90, 180, 270]
 angels_p = [0.25, 0.25, 0.25, 0.25]
+
+
+# 旋转坐标（顺时针）
+# 平面上一点x1,y1,绕平面上另一点x2,y2顺时针旋转θ角度
+# x=(x1-x2)cosθ-(y1-y2)sinθ+x2
+# y=(y1-y2)cosθ+(x1-x2)sinθ+y2
+def rotate_xy(x1, y1, theta, character_size):
+    if theta==90 or theta==270:
+        x2 = y2 = 0
+    else:
+        x2 = character_size[0]/2
+        y2 = character_size[1]/2
+
+    x = (x1-x2) * math.cos(math.radians(theta)) + (y1-y2) * math.sin(math.radians(theta)) + x2
+    y = (y1-y2) * math.cos(math.radians(theta)) - (x1-x2) * math.sin(math.radians(theta)) + y2
+
+    if theta==90:
+        y += character_size[1]
+    elif theta==270:
+        x += character_size[0]
+
+    return x, y
+
+# 生成 json
+def generate_json(character, background_size, character_size, coordinates, rotate_angle, generated_filename):
+    # 准备标记
+    json_file = path.join('box_json', f'{character}.json')
+    if not path.exists(json_file):
+        print('read json ERROR!')
+        return None
+
+    with open(json_file) as fp:
+        j = json.load(fp)
+
+    j['imageWidth'] = background_size[0]
+    j['imageHeight'] = background_size[1]
+
+    if j['shapes'][0]['label']=='box' and j['shapes'][1]['label']=='CT':
+        p1 = j['shapes'][0]['points']
+        p2 = j['shapes'][1]['points']
+    elif j['shapes'][0]['label']=='CT' and j['shapes'][1]['label']=='box':
+        p1 = j['shapes'][1]['points']
+        p2 = j['shapes'][0]['points']
+    else:
+        print('label err! ', json_file)
+        return None
+
+    p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
+    p1[1][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
+
+    p1[0][0] += coordinates[0]
+    p1[0][1] += coordinates[1]
+    p1[1][0] += coordinates[0]
+    p1[1][1] += coordinates[1]
+
+    p2[0][0], p2[0][1] = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
+    p2[1][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
+
+    p2[0][0] += coordinates[0]
+    p2[0][1] += coordinates[1]
+    p2[1][0] += coordinates[0]
+    p2[1][1] += coordinates[1]
+
+
+    j['imagePath'] = f'../generated/{generated_filename}'
+
+    base_filename = path.splitext(generated_filename)[0]
+
+    json.dump(
+        j,
+        open(f'{output_json_folder}/{base_filename}.json', 'w', encoding='utf-8'),
+        indent=4,
+        ensure_ascii=False
+    )    
+
+    return j
 
 def generate_image(background, character, object, file_name):
     """Generate image with given background, given character and given object and save it with the given file name
@@ -42,28 +125,55 @@ def generate_image(background, character, object, file_name):
         np.random.randint(0,int(background_image.width-character_image.width)), 
         np.random.randint(0,int(background_image.height-character_image.height))
     ) #x, y
+
     background_image.paste(character_image, coordinates, mask=character_image)
 
 
     #Create object
     if object != "none":
+        object, object_pos = object.split('-')
         object_file = path.join("objects", f"{object}.png")
         object_image = Image.open(object_file)
 
-        if rotate_angle==0 or rotate_angle==180:
-            coordinates2 = (
-                int(coordinates[0]+character_image.width+np.random.randint(-20, 0)), 
-                coordinates[1]+np.random.randint(-250, -150)
-            ) #x, y
-        else:
-            coordinates2 = (
-                int(coordinates[0]+character_image.width+np.random.randint(-150, -80)), 
-                coordinates[1]+np.random.randint(-250, -150)
-            ) #x, y
+        if object_pos=='R': # 在右侧
+            if rotate_angle==0 or rotate_angle==180:
+                x_offset = character_image.width+np.random.randint(-20, 0)
+                y_offset = np.random.randint(-250, -150)
+            else:
+                x_offset = character_image.width+np.random.randint(-150, -80)
+                y_offset = np.random.randint(-250, -150)
+        elif object_pos=='L': # 在左侧
+            if rotate_angle==0 or rotate_angle==180:
+                x_offset = -object_image.width+np.random.randint(0, 20)
+                y_offset = np.random.randint(-250, -150)
+            else:
+                x_offset = -object_image.width+np.random.randint(80, 150)
+                y_offset = np.random.randint(-250, -150)
+        elif object_pos=='U': # 在上面
+            if rotate_angle==0 or rotate_angle==180:
+                x_offset = np.random.randint(0, 50)
+                y_offset = -object_image.height+np.random.randint(0, 20)
+            else:
+                x_offset = np.random.randint(100, 250)
+                y_offset = -object_image.height+np.random.randint(0, 20)
+        else: # 在下面
+            if rotate_angle==0 or rotate_angle==180:
+                x_offset = np.random.randint(0, 50)
+                y_offset = character_image.height+np.random.randint(-20, 0)
+            else:
+                x_offset = np.random.randint(100, 250)
+                y_offset = character_image.height+np.random.randint(-20, 0)
+
+        coordinates2 = (coordinates[0]+x_offset, coordinates[1]+y_offset) #x, y
+
         background_image.paste(object_image, coordinates2, mask=object_image)
 
-    output_file = path.join(output_folder, f"{file_name}.jpg")
+    file_name = f"{file_name}.jpg"
+    output_file = path.join(output_folder, file_name)
     background_image.save(output_file)
+
+    generate_json(character, background_image.size, character_image.size, 
+        coordinates, rotate_angle, file_name)
 
 
 def generate_random_imgs(total_imgs):
