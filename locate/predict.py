@@ -14,7 +14,7 @@ input_size = (224,224,3)
 json_path = '../data/json'
 
 model = get_model('vgg16', weights=None)
-model.load_weights("locate_vgg16_b16_e10_20_0.82327.h5")
+model.load_weights("../ckpt/locate_vgg16_b16_e10_20_0.82327.h5")
 #model = get_model('densenet', weights=None)
 #model.load_weights('locard_densenet_b32_e10_100_0.82439.h5')
 

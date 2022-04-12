@@ -31,6 +31,8 @@ train_generator = train_datagen.flow_from_directory(
     batch_size=batch_size,
 )
 
+print(train_generator.class_indices)
+
 test_datagen = ImageDataGenerator(
     preprocessing_function=lambda x: x.astype(np.float32),
 )
@@ -40,6 +42,8 @@ test_generator = test_datagen.flow_from_directory(
     target_size=input_size[:2],
     batch_size=batch_size,
 )
+
+print(test_generator.class_indices)
 
 # create the base pre-trained model
 base_model = VGG16(weights='imagenet', input_shape=input_size, include_top=False)
