@@ -82,6 +82,12 @@ def generate_json(character, background_size, character_size, coordinates, rotat
         print('label err! ', json_file)
         return None
 
+    p1[0][0] //= 2
+    p1[0][1] //= 2
+    p1[1][0] //= 2
+    p1[1][1] //= 2
+
+
     p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
     p1[1][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
 
@@ -89,6 +95,11 @@ def generate_json(character, background_size, character_size, coordinates, rotat
     p1[0][1] += coordinates[1]
     p1[1][0] += coordinates[0]
     p1[1][1] += coordinates[1]
+
+    p2[0][0] //= 2
+    p2[0][1] //= 2
+    p2[1][0] //= 2
+    p2[1][1] //= 2
 
     p2[0][0], p2[0][1] = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
     p2[1][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
@@ -124,9 +135,15 @@ def generate_image(background, character, object, file_name):
     background_file = path.join("backgrounds", f"{background}.png")
     background_image = Image.open(background_file)
 
+    (width, height) = (background_image.width // 2, background_image.height // 2)
+    background_image = background_image.resize((width, height))
+
     #Create character
     character_file = path.join("characters", f"{character}.png")
     character_image = Image.open(character_file)
+
+    (width, height) = (character_image.width // 2, character_image.height // 2)
+    character_image = character_image.resize((width, height))
 
     # rotate
     rotate_angle = np.random.choice(np.arange(0,len(angels)), p=angels_p)
@@ -147,6 +164,10 @@ def generate_image(background, character, object, file_name):
         object, object_pos = object.split('-')
         object_file = path.join("objects", f"{object}.png")
         object_image = Image.open(object_file)
+
+        (width, height) = (object_image.width // 2, object_image.height // 2)
+        object_image = object_image.resize((width, height))
+
 
         if object_pos=='R': # 在右侧
             if rotate_angle==0 or rotate_angle==180:
