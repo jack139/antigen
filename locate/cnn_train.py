@@ -12,8 +12,8 @@ from metrics import IoU, IoU2
 
 input_size = (224,224,3)
 batch_size = 16
-steps_per_epoch = 20
-epochs = 10
+steps_per_epoch = 50
+epochs = 30
 train_dir = '../data/train'
 train_json = '../data/json'
 val_dir = '../data/dev'
@@ -26,10 +26,10 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=4, target_size=input
 
 
 # 生成模型
-model_type = 'vgg16'
+model_type = 'vgg19' #'vgg16'
 model = get_model(model_type, input_size=input_size, freeze=True)
 
-opt = Adam(lr=3e-4)
+opt = Adam(lr=1e-4)
 model.compile(loss="mse", optimizer=opt, metrics=[IoU, IoU2])
 
 print(model.summary())
@@ -46,7 +46,7 @@ model.fit_generator(train_generator,
     steps_per_epoch=steps_per_epoch,
     epochs=epochs,
     validation_data=val_generator,
-    validation_steps=20,
+    validation_steps=50,
     callbacks=[model_checkpoint]
 )
 
@@ -68,6 +68,6 @@ model.fit_generator(train_generator,
     steps_per_epoch=steps_per_epoch,
     epochs=epochs,
     validation_data=val_generator,
-    validation_steps=20,
+    validation_steps=50,
     callbacks=[model_checkpoint]
 )
