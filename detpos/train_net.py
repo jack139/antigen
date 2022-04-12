@@ -16,8 +16,8 @@ input_size = (128,128,3) # 对 crop 数据 128就够了
 batch_size = 16
 steps_per_epoch = 20
 epochs = 10
-train_dir = 'data/crop_train'
-test_dir = 'data/crop_dev'
+train_dir = '../data/crop_train'
+test_dir = '../data/crop_dev'
 
 
 # 数据生成器
@@ -80,7 +80,7 @@ model.fit(train_generator,
         validation_data=test_generator,
         validation_steps=5)
 
-model.save('batch_%d_epochs_%d_steps_%d_0.hdf5'%(batch_size, epochs, steps_per_epoch))
+model.save('batch_%d_epochs_%d_steps_%d_0.h5'%(batch_size, epochs, steps_per_epoch))
 
 # at this point, the top layers are well trained and we can start fine-tuning
 # convolutional layers from inception V3. We will freeze the bottom N layers
@@ -114,4 +114,4 @@ model.fit(train_generator,
         validation_data=test_generator,
         validation_steps=5)
 
-model.save('batch_%d_epochs_%d_steps_%d_1.hdf5'%(batch_size, epochs, steps_per_epoch))
+model.save('batch_%d_epochs_%d_steps_%d_1.h5'%(batch_size, epochs, steps_per_epoch))

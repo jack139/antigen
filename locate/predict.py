@@ -71,6 +71,9 @@ def draw_box(test_path, p1, p2):
         True, color=(0, 255, 0), thickness=2)
     cv2.imwrite('data/test_result.jpg', img)
 
+    crop_img = img[int(p1[1]):int(p1[3]), int(p1[0]):int(p1[2])]
+    cv2.imwrite('data/test_crop.jpg', crop_img)
+
 
 def predict(inputs, h, w): # h,w 为原始图片的 尺寸
     start_time = datetime.now()
