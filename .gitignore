@@ -64,6 +64,7 @@ target/
 
 test_result*/
 build/
+ckpt/
 data/
 *.hdf5
 *.h5
