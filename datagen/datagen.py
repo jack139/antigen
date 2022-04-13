@@ -8,7 +8,7 @@ import json
 output_folder = "data/generated"
 output_json_folder = "data/json"
 
-resize_ratio = 3 # 原始图片缩小倍数
+resize_ratio = 2 # 原始图片缩小倍数
 
 if not path.exists(output_folder):
     mkdir(output_folder)

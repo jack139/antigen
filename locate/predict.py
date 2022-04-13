@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import os, sys
+import os, sys, glob
 os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 import json
@@ -9,14 +9,13 @@ import cv2
 from model import get_model
 from datetime import datetime
 
-input_size = (224,224,3)
+input_size = (256,256,3)
 
 json_path = '../data/json'
 
-model = get_model('vgg16', weights=None)
+model = get_model('vgg16', input_size=input_size, weights=None)
 model.load_weights("../ckpt/locate_vgg16_b16_e10_20_0.82327.h5")
-#model = get_model('densenet', weights=None)
-#model.load_weights('locard_densenet_b32_e10_100_0.82439.h5')
+
 
 def read_img(test_path,target_size = (224,224)):
     img = cv2.imread(test_path)
@@ -62,17 +61,74 @@ def read_json(test_path):
 
     return y
 
+def rotate_bound(image,angle):
+    #获取图像的尺寸
+    #旋转中心
+    (h,w) = image.shape[:2]
+    (cx,cy) = (w/2,h/2)
+    
+    #设置旋转矩阵
+    M = cv2.getRotationMatrix2D((cx,cy),-angle,1.0)
+    cos = np.abs(M[0,0])
+    sin = np.abs(M[0,1])
+    
+    # 计算图像旋转后的新边界
+    nW = int((h*sin)+(w*cos))
+    nH = int((h*cos)+(w*sin))
+    
+    # 调整旋转矩阵的移动距离（t_{x}, t_{y}）
+    M[0,2] += (nW/2) - cx
+    M[1,2] += (nH/2) - cy
+    
+    return cv2.warpAffine(image,M,(nW,nH))
 
 def draw_box(test_path, p1, p2):
     img = cv2.imread(test_path)
+
+    # 截图
+    if p1[0]<p1[2]:
+        x1, x2 = p1[0], p1[2]
+    else:
+        x1, x2 = p1[2], p1[0]
+    if p1[1]<p1[3]:
+        y1, y2 = p1[1], p1[3]
+    else:
+        y1, y2 = p1[3], p1[1]
+    crop_img = img[int(y1):int(y2), int(x1):int(x2)].copy()
+
+    # 计算需选择角度
+    rotate_angle = 0
+    box1, box2 = p1, p2
+    if (box1[2]-box1[0]) < (box1[3]-box1[1]): # 高大于宽，说明是竖着的
+        rotate_angle = 90
+
+    # 计算box1 box2 的中心
+    box1_c = [ (box1[2]-box1[0])/2+box1[0], (box1[3]-box1[1])/2+box1[1] ]
+    box2_c = [ (box2[2]-box2[0])/2+box2[0], (box2[3]-box2[1])/2+box2[1] ]
+
+    # 判断CT的位置
+    if rotate_angle==0: # 横向
+        if box1_c[0] > box2_c[0]: # CT在左
+            rotate_angle = 180
+    else: # 证件 竖向
+        if box1_c[1] < box2_c[1]: # CT在下
+            rotate_angle = 270
+        else:
+            rotate_angle = 90
+
+    # 旋转
+    crop_img = rotate_bound(crop_img, rotate_angle)
+
+    basename = os.path.basename(test_path)
+    cv2.imwrite(f'data/{basename}', crop_img)
+
+    # 划线
     cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
         True, color=(0, 255, 0), thickness=2)
     cv2.polylines(img, [np.array([ [p2[0], p2[1]], [p2[2], p2[1]], [p2[2], p2[3]], [p2[0], p2[3]] ], np.int32)], 
         True, color=(0, 255, 0), thickness=2)
     cv2.imwrite('data/test_result.jpg', img)
 
-    crop_img = img[int(p1[1]):int(p1[3]), int(p1[0]):int(p1[2])]
-    cv2.imwrite('data/test_crop.jpg', crop_img)
 
 
 def predict(inputs, h, w): # h,w 为原始图片的 尺寸
@@ -94,7 +150,7 @@ def predict(inputs, h, w): # h,w 为原始图片的 尺寸
         results[0][7]*h,
     )
 
-    print(results)
+    #print(results)
 
     return p1, p2, results
 
@@ -119,25 +175,31 @@ if __name__ == '__main__':
         print("usage: python %s <img_path>"%sys.argv[0])
         sys.exit(2)
 
-    inputs, h, w = read_img(sys.argv[1], target_size=input_size[:2])
-    p1, p2, pred = predict(inputs, h, w)
-    draw_box(sys.argv[1], p1, p2)
+    if os.path.isdir(sys.argv[1]):
+        file_list = glob.glob(sys.argv[1])
+    else:
+        file_list = [sys.argv[1]]
 
-    # 计算IoU
-    truth = read_json(sys.argv[1])
-    if truth is not None:
-        print(truth)
-        box1 = [
-            truth[1],
-            truth[0],
-            truth[3],
-            truth[2],
-        ]
+    for ff in file_list:
+        inputs, h, w = read_img(ff, target_size=input_size[:2])
+        p1, p2, pred = predict(inputs, h, w)
+        draw_box(ff, p1, p2)
 
-        box2 = [
-            pred[0][1],
-            pred[0][0],
-            pred[0][3],
-            pred[0][2],
-        ]
-        print('IoU = ', IoU(box1, box2))
+        # 计算IoU
+        truth = read_json(ff)
+        if truth is not None:
+            #print(truth)
+            box1 = [
+                truth[1],
+                truth[0],
+                truth[3],
+                truth[2],
+            ]
+
+            box2 = [
+                pred[0][1],
+                pred[0][0],
+                pred[0][3],
+                pred[0][2],
+            ]
+            print('IoU = ', IoU(box1, box2))
