@@ -224,9 +224,9 @@ def generate_random_imgs(total_imgs):
         object = np.random.choice(np.arange(0,len(objects)), p=objects_p)
         object = objects[object]
 
-        generate_image(background, character, object, f"generated{num}")
+        generate_image(background, character, object, f"{num:06d}_{character[:3]}")
 
 
 if __name__ == "__main__":
-    generate_random_imgs(20)
+    generate_random_imgs(50)
 

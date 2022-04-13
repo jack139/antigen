@@ -25,7 +25,6 @@ train_steps_per_epoch = train_num // batch_size + 1
 val_steps_per_epoch = val_num // batch_size + 1 
 epochs = 10
 
-print(f"train data: {train_num}\tdev data: {val_num}")
 
 # 数据生成器
 train_generator = dataGenerator(train_dir, train_json, batch_size=batch_size, target_size=input_size[:2])
@@ -34,14 +33,16 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 
 # 生成模型
 model_type = 'vgg16'
-model = get_model(model_type, input_size=input_size, freeze=True)
-#model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
+#model = get_model(model_type, input_size=input_size, freeze=True)
+model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
 
 opt = Adam(lr=1e-4)
 #model.compile(loss="mse", optimizer=opt, metrics=[IoU, IoU2])
 model.compile(loss=IoULoss, optimizer=opt, metrics=[IoU, IoU2])
 
 print(model.summary())
+
+print(f"train data: {train_num}\tdev data: {val_num}")
 
 # train the network for bounding box regression
 print("[INFO] training bounding box regressor...")
