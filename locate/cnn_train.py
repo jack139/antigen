@@ -17,13 +17,16 @@ val_dir = '../data/dev'
 val_json = '../data/json'
 
 
-input_size = (256,256,3)
+model_type = 'vgg16'
+freeze = True # 是否冻结 CNN 模型
+input_size = (256,256,3)  # 模型输入图片尺寸
+batch_size = 16
+epochs = 10
+learning_rate = 1e-4
 train_num = len(os.listdir(train_dir)) # 训练集 数量
 val_num = len(os.listdir(val_dir))
-batch_size = 16
 train_steps_per_epoch = train_num // batch_size + 1 
 val_steps_per_epoch = val_num // batch_size + 1 
-epochs = 10
 
 
 # 数据生成器
@@ -32,13 +35,10 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 
 
 # 生成模型
-model_type = 'vgg16'
-#model = get_model(model_type, input_size=input_size, freeze=True)
-model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
+model = get_model(model_type, input_size=input_size, freeze=freeze)
+#model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
 
-opt = Adam(lr=1e-4)
-#model.compile(loss="mse", optimizer=opt, metrics=[IoU, IoU2])
-model.compile(loss=IoULoss, optimizer=opt, metrics=[IoU, IoU2])
+model.compile(loss=IoULoss, optimizer=Adam(lr=learning_rate), metrics=[IoU, IoU2])
 
 print(model.summary())
 
@@ -51,28 +51,6 @@ ckpt_filepath = "locate_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_st
 
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
     monitor='val_IoU',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
-
-model.fit_generator(train_generator,
-    steps_per_epoch=train_steps_per_epoch,
-    epochs=epochs,
-    validation_data=val_generator,
-    validation_steps=val_steps_per_epoch,
-    callbacks=[model_checkpoint]
-)
-
-# 解冻base model的参数后再训练
-
-# 数据生成器
-train_generator = dataGenerator(train_dir, train_json, batch_size=batch_size, target_size=input_size[:2])
-val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_size=input_size[:2])
-
-# 解冻的模型
-model = get_model(model_type, input_size=input_size, freeze=False, weights=None)
-model.load_weights(ckpt_filepath)
-
-model.compile(loss=IoULoss, optimizer=opt, metrics=[IoU, IoU2])
-
-print(model.summary())
 
 model.fit_generator(train_generator,
     steps_per_epoch=train_steps_per_epoch,
