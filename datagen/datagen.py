@@ -8,6 +8,8 @@ import json
 output_folder = "data/generated"
 output_json_folder = "data/json"
 
+resize_ratio = 3 # 原始图片缩小倍数
+
 if not path.exists(output_folder):
     mkdir(output_folder)
 if not path.exists(output_json_folder):
@@ -82,10 +84,10 @@ def generate_json(character, background_size, character_size, coordinates, rotat
         print('label err! ', json_file)
         return None
 
-    p1[0][0] //= 2
-    p1[0][1] //= 2
-    p1[1][0] //= 2
-    p1[1][1] //= 2
+    p1[0][0] //= resize_ratio
+    p1[0][1] //= resize_ratio
+    p1[1][0] //= resize_ratio
+    p1[1][1] //= resize_ratio
 
 
     p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
@@ -96,10 +98,10 @@ def generate_json(character, background_size, character_size, coordinates, rotat
     p1[1][0] += coordinates[0]
     p1[1][1] += coordinates[1]
 
-    p2[0][0] //= 2
-    p2[0][1] //= 2
-    p2[1][0] //= 2
-    p2[1][1] //= 2
+    p2[0][0] //= resize_ratio
+    p2[0][1] //= resize_ratio
+    p2[1][0] //= resize_ratio
+    p2[1][1] //= resize_ratio
 
     p2[0][0], p2[0][1] = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
     p2[1][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
@@ -135,14 +137,14 @@ def generate_image(background, character, object, file_name):
     background_file = path.join("backgrounds", f"{background}.png")
     background_image = Image.open(background_file)
 
-    (width, height) = (background_image.width // 2, background_image.height // 2)
+    (width, height) = (background_image.width // resize_ratio, background_image.height // resize_ratio)
     background_image = background_image.resize((width, height))
 
     #Create character
     character_file = path.join("characters", f"{character}.png")
     character_image = Image.open(character_file)
 
-    (width, height) = (character_image.width // 2, character_image.height // 2)
+    (width, height) = (character_image.width // resize_ratio, character_image.height // resize_ratio)
     character_image = character_image.resize((width, height))
 
     # rotate
@@ -150,10 +152,14 @@ def generate_image(background, character, object, file_name):
     rotate_angle = angels[rotate_angle]
     character_image = character_image.rotate(rotate_angle, expand=True)
 
+    xx = background_image.width//2-character_image.width//2
+    yy = background_image.height//2-character_image.height//2
+
     coordinates = (
-        #int(background_image.width/2-character_image.width/2), 
-        np.random.randint(0,int(background_image.width-character_image.width)), 
-        np.random.randint(0,int(background_image.height-character_image.height))
+        xx + np.random.randint(-xx//2, xx//2),
+        yy + np.random.randint(-yy//2, yy//2)
+        #np.random.randint(0,background_image.width-character_image.width), 
+        #np.random.randint(0,background_image.height-character_image.height)
     ) #x, y
 
     background_image.paste(character_image, coordinates, mask=character_image)
@@ -165,38 +171,30 @@ def generate_image(background, character, object, file_name):
         object_file = path.join("objects", f"{object}.png")
         object_image = Image.open(object_file)
 
-        (width, height) = (object_image.width // 2, object_image.height // 2)
+        (width, height) = (object_image.width // resize_ratio, object_image.height // resize_ratio)
         object_image = object_image.resize((width, height))
 
 
         if object_pos=='R': # 在右侧
             if rotate_angle==0 or rotate_angle==180:
-                x_offset = character_image.width+np.random.randint(-20, 0)
-                y_offset = np.random.randint(-250, -150)
+                x_offset = character_image.width+np.random.randint(-5, 0)
+                y_offset = np.random.randint(-80, -50)
             else:
-                x_offset = character_image.width+np.random.randint(-150, -80)
-                y_offset = np.random.randint(-250, -150)
+                x_offset = character_image.width+np.random.randint(-50, -30)
+                y_offset = np.random.randint(-80, -50)
         elif object_pos=='L': # 在左侧
             if rotate_angle==0 or rotate_angle==180:
-                x_offset = -object_image.width+np.random.randint(0, 20)
-                y_offset = np.random.randint(-250, -150)
+                x_offset = -object_image.width+np.random.randint(0, 5)
+                y_offset = np.random.randint(-80, -50)
             else:
-                x_offset = -object_image.width+np.random.randint(80, 150)
-                y_offset = np.random.randint(-250, -150)
+                x_offset = -object_image.width+np.random.randint(30, 50)
+                y_offset = np.random.randint(-80, -50)
         elif object_pos=='U': # 在上面
-            if rotate_angle==0 or rotate_angle==180:
-                x_offset = np.random.randint(0, 50)
-                y_offset = -object_image.height+np.random.randint(0, 20)
-            else:
-                x_offset = np.random.randint(100, 250)
-                y_offset = -object_image.height+np.random.randint(0, 20)
+            x_offset = np.random.randint(-80, -30)
+            y_offset = -object_image.height+np.random.randint(0, 5)
         else: # 在下面
-            if rotate_angle==0 or rotate_angle==180:
-                x_offset = np.random.randint(0, 50)
-                y_offset = character_image.height+np.random.randint(-20, 0)
-            else:
-                x_offset = np.random.randint(100, 250)
-                y_offset = character_image.height+np.random.randint(-20, 0)
+            x_offset = np.random.randint(-80, -30)
+            y_offset = character_image.height+np.random.randint(-5, 0)
 
         coordinates2 = (coordinates[0]+x_offset, coordinates[1]+y_offset) #x, y
 
@@ -230,5 +228,5 @@ def generate_random_imgs(total_imgs):
 
 
 if __name__ == "__main__":
-    generate_random_imgs(1000)
+    generate_random_imgs(20)
 
