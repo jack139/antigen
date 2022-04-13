@@ -18,10 +18,10 @@ val_json = '../data/json'
 
 
 model_type = 'vgg16'
-freeze = True # 是否冻结 CNN 模型
+freeze = False # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
 batch_size = 16
-epochs = 10
+epochs = 30
 learning_rate = 1e-4
 train_num = len(os.listdir(train_dir)) # 训练集 数量
 val_num = len(os.listdir(val_dir))
