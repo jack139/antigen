@@ -1,7 +1,7 @@
 # coding=utf-8
 
 import numpy as np
-from keras.applications import ResNet50, VGG16, VGG19, Xception, DenseNet121
+from keras.applications import ResNet50, VGG16, MobileNetV2, DenseNet121
 from keras.models import Model
 from keras.layers import Dense, Dropout, Input, Flatten, LeakyReLU
 
@@ -10,12 +10,10 @@ def get_model(model_type='vgg16', input_size = (224,224,3), freeze=False, weight
     # create the base pre-trained model
     if model_type=='resnet':
         base_model = ResNet50(weights=weights, input_shape=input_size, include_top=False)
-    elif model_type=='xception':
-        base_model = Xception(weights=weights, include_top=False, input_tensor=Input(shape=input_size))
-    elif model_type=='densenet':
+    elif model_type=='mobile':
+        base_model = MobileNetV2(weights=weights, include_top=False, input_tensor=Input(shape=input_size))
+    elif model_type=='dense':
         base_model = DenseNet121(weights=weights, include_top=False, input_tensor=Input(shape=input_size))
-    elif model_type=='vgg19':
-        base_model = VGG19(weights=weights, include_top=False, input_tensor=Input(shape=input_size))
     else:
         base_model = VGG16(weights=weights, include_top=False, input_tensor=Input(shape=input_size))
 
