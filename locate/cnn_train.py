@@ -35,8 +35,8 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 
 
 # 生成模型
-#model = get_model(model_type, input_size=input_size, freeze=freeze)
-model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
+model = get_model(model_type, input_size=input_size, freeze=freeze)
+#model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
 
 model.compile(loss=IoULoss, optimizer=Adam(lr=learning_rate), metrics=[IoU, IoU2])
 
