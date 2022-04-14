@@ -150,24 +150,35 @@ def predict(inputs, h, w): # h,w 为原始图片的 尺寸
         results[0][7]*h,
     )
 
-    #print(results)
-
     return p1, p2, results
 
 
-# box:[上, 左, 下, 右]
-def IoU(box1, box2):
-    # 计算中间矩形的宽高
-    in_h = min(box1[2], box2[2]) - max(box1[0], box2[0])
-    in_w = min(box1[3], box2[3]) - max(box1[1], box2[1])
+def IoU(y_true, y_pred):
+    # iou as metric for bounding box regression
+    # input must be as [x1, y1, x2, y2]
+
+    # AOG = Area of Groundtruth box
+    AoG = abs(y_true[2] - y_true[0] + 1) * abs(y_true[3] - y_true[1] + 1)
     
-    # 计算交集、并集面积
-    inter = 0 if in_h < 0 or in_w < 0 else in_h * in_w
-    union = (box1[2] - box1[0]) * (box1[3] - box1[1]) + \
-            (box2[2] - box2[0]) * (box2[3] - box2[1]) - inter
-    # 计算IoU
-    iou = inter / union
-    return iou
+    # AOP = Area of Predicted box
+    AoP = abs(y_pred[2] - y_pred[0] + 1) * abs(y_pred[3] - y_pred[1] + 1)
+
+    # overlaps are the co-ordinates of intersection box
+    overlap_0 = max(y_true[0], y_pred[0])
+    overlap_1 = max(y_true[1], y_pred[1])
+    overlap_2 = min(y_true[2], y_pred[2])
+    overlap_3 = min(y_true[3], y_pred[3])
+
+    # intersection area
+    intersection = (overlap_2 - overlap_0 + 1) * (overlap_3 - overlap_1 + 1)
+
+    # area of union of both boxes
+    union = AoG + AoP - intersection
+    
+    # iou calculation
+    iou = intersection / union
+
+    return iou 
 
 
 if __name__ == '__main__':
@@ -189,17 +200,5 @@ if __name__ == '__main__':
         truth = read_json(ff)
         if truth is not None:
             #print(truth)
-            box1 = [
-                truth[1],
-                truth[0],
-                truth[3],
-                truth[2],
-            ]
-
-            box2 = [
-                pred[0][1],
-                pred[0][0],
-                pred[0][3],
-                pred[0][2],
-            ]
-            print('IoU = ', IoU(box1, box2))
+            #print(pred)
+            print('IoU = ', IoU(truth, pred[0]))
