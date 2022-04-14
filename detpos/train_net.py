@@ -29,6 +29,10 @@ test_dir = '../data/crop_dev'
 # 数据生成器
 train_datagen = ImageDataGenerator(
     preprocessing_function=lambda x: x.astype(np.float32),
+    rotation_range=5,
+    width_shift_range=5,
+    height_shift_range=5,
+    zoom_range=0.1
 )
 train_generator = train_datagen.flow_from_directory(
     train_dir,
