@@ -89,9 +89,14 @@ def generate_json(character, background_size, character_size, coordinates, rotat
     p1[1][0] //= resize_ratio
     p1[1][1] //= resize_ratio
 
-
-    p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
-    p1[1][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
+    # 保证左上、右下两个点
+    if rotate_angle==0 or rotate_angle==180:
+        p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
+        p1[1][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
+    else:
+        tmp_x, tmp_y = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
+        p1[0][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
+        p1[1][0], p1[0][1] = tmp_x, tmp_y
 
     p1[0][0] += coordinates[0]
     p1[0][1] += coordinates[1]
@@ -103,14 +108,26 @@ def generate_json(character, background_size, character_size, coordinates, rotat
     p2[1][0] //= resize_ratio
     p2[1][1] //= resize_ratio
 
-    p2[0][0], p2[0][1] = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
-    p2[1][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
+    # 保证左上、右下两个点
+    if rotate_angle==0 or rotate_angle==180:
+        p2[0][0], p2[0][1] = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
+        p2[1][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
+    else:
+        tmp_x, tmp_y = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
+        p2[0][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
+        p2[1][0], p2[0][1] = tmp_x, tmp_y
 
     p2[0][0] += coordinates[0]
     p2[0][1] += coordinates[1]
     p2[1][0] += coordinates[0]
     p2[1][1] += coordinates[1]
 
+    # 调整坐标顺序
+    if p1[0][0]>p1[1][0]:
+        p1[0], p1[1] = p1[1], p1[0]
+
+    if p2[0][0]>p2[1][0]:
+        p2[0], p2[1] = p2[1], p2[0]
 
     j['imagePath'] = f'../generated/{generated_filename}'
 
@@ -228,5 +245,5 @@ def generate_random_imgs(total_imgs):
 
 
 if __name__ == "__main__":
-    generate_random_imgs(50)
+    generate_random_imgs(20)
 
