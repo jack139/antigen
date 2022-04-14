@@ -8,22 +8,26 @@ import numpy as np
 import cv2
 from model import get_model
 from datetime import datetime
+from tqdm import tqdm
 
 input_size = (256,256,3)
 
-json_path = '../data/json'
+json_path = '../datagen/data/json2'
 
-output_path = '../data/test'
+output_path = './data/test'
 
-if not path.exists(output_path):
-    mkdir(output_path)
-    mkdir(f"{output_path}/nul")
-    mkdir(f"{output_path}/fal")
-    mkdir(f"{output_path}/neg")
-    mkdir(f"{output_path}/pos")
+if not os.path.exists(output_path):
+    os.mkdir(output_path)
+    os.mkdir(f"{output_path}/nul")
+    os.mkdir(f"{output_path}/fal")
+    os.mkdir(f"{output_path}/neg")
+    os.mkdir(f"{output_path}/pos")
+
+#model = get_model('mobile', input_size=input_size, weights=None)
+#model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
 
 model = get_model('vgg16', input_size=input_size, weights=None)
-model.load_weights("../ckpt/locate_vgg16_b16_e10_20_0.82327.h5")
+model.load_weights("./locate_vgg16_b128_e30_71_0.98894.h5")
 
 
 def read_img(test_path,target_size = (224,224)):
@@ -122,7 +126,10 @@ def draw_box(test_path, p1, p2):
     crop_img = rotate_bound(crop_img, rotate_angle)
 
     basename = os.path.basename(test_path)
-    label = basename.split('_')[1][:3]
+    if '_' in basename:
+        label = basename.split('_')[1][:3]
+    else:
+        label = ''
     cv2.imwrite(f'{output_path}/{label}/{basename}', crop_img)
 
     cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
@@ -188,18 +195,21 @@ if __name__ == '__main__':
         sys.exit(2)
 
     if os.path.isdir(sys.argv[1]):
-        file_list = glob.glob(sys.argv[1])
+        file_list = glob.glob(sys.argv[1]+'/*')
     else:
         file_list = [sys.argv[1]]
 
-    for ff in file_list:
+    compu_iou = len(file_list)==1
+
+    for ff in tqdm(file_list):
         inputs, h, w = read_img(ff, target_size=input_size[:2])
         p1, p2, pred = predict(inputs, h, w)
         draw_box(ff, p1, p2)
 
-        # 计算IoU
-        truth = read_json(ff)
-        if truth is not None:
-            #print(truth)
-            #print(pred)
-            print(ff, 'IoU = ', IoU(truth, pred[0]))
+        if compu_iou:
+            # 计算IoU
+            truth = read_json(ff)
+            if truth is not None:
+                #print(truth)
+                #print(pred)
+                print(ff, 'IoU = ', IoU(truth, pred[0]))

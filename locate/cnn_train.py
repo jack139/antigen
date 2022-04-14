@@ -17,10 +17,10 @@ val_dir = '../data/dev'
 val_json = '../data/json'
 
 
-model_type = 'mobile'
+model_type = 'vgg16'
 freeze = False # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
-batch_size = 16
+batch_size = 128
 epochs = 30
 learning_rate = 1e-4
 train_num = len(os.listdir(train_dir)) # 训练集 数量
@@ -51,6 +51,8 @@ ckpt_filepath = "locate_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_st
 
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
     monitor='val_IoU',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
+
+#model.load_weights("./locate_mobile_b128_e30_71_0.97200.h5")
 
 model.fit_generator(train_generator,
     steps_per_epoch=train_steps_per_epoch,

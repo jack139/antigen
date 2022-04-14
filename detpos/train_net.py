@@ -13,10 +13,10 @@ from keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from keras.callbacks import ModelCheckpoint
 
 
-freeze = True # 是否冻结 CNN 模型
+freeze = False # 是否冻结 CNN 模型
 input_size = (128,128,3) # 对 crop 数据 128就够了
-batch_size = 32
-learning_rate = 1e-3
+batch_size = 512
+learning_rate = 1e-4
 train_num = 9000
 dev_num = 1000
 train_steps_per_epoch = train_num // batch_size + 1 
@@ -29,7 +29,7 @@ test_dir = '../data/crop_dev'
 # 数据生成器
 train_datagen = ImageDataGenerator(
     preprocessing_function=lambda x: x.astype(np.float32),
-    rotation_range=5,
+    rotation_range=3,
     width_shift_range=5,
     height_shift_range=5,
     zoom_range=0.1
