@@ -13,6 +13,15 @@ input_size = (256,256,3)
 
 json_path = '../data/json'
 
+output_path = '../data/test'
+
+if not path.exists(output_path):
+    mkdir(output_path)
+    mkdir(f"{output_path}/nul")
+    mkdir(f"{output_path}/fal")
+    mkdir(f"{output_path}/neg")
+    mkdir(f"{output_path}/pos")
+
 model = get_model('vgg16', input_size=input_size, weights=None)
 model.load_weights("../ckpt/locate_vgg16_b16_e10_20_0.82327.h5")
 
@@ -85,56 +94,48 @@ def rotate_bound(image,angle):
 def draw_box(test_path, p1, p2):
     img = cv2.imread(test_path)
 
-    # 截图
-    if p1[0]<p1[2]:
-        x1, x2 = p1[0], p1[2]
-    else:
-        x1, x2 = p1[2], p1[0]
-    if p1[1]<p1[3]:
-        y1, y2 = p1[1], p1[3]
-    else:
-        y1, y2 = p1[3], p1[1]
-    crop_img = img[int(y1):int(y2), int(x1):int(x2)].copy()
-
+    # 截图 box
+    crop_img = img[int(p1[1]):int(p1[3]), int(p1[0]):int(p1[2])].copy()
+  
     # 计算需选择角度
     rotate_angle = 0
     box1, box2 = p1, p2
-    if (box1[2]-box1[0]) < (box1[3]-box1[1]): # 高大于宽，说明是竖着的
-        rotate_angle = 90
 
     # 计算box1 box2 的中心
     box1_c = [ (box1[2]-box1[0])/2+box1[0], (box1[3]-box1[1])/2+box1[1] ]
     box2_c = [ (box2[2]-box2[0])/2+box2[0], (box2[3]-box2[1])/2+box2[1] ]
 
-    # 判断CT的位置
-    if rotate_angle==0: # 横向
-        if box1_c[0] > box2_c[0]: # CT在左
+    if abs(box1_c[0]-box2_c[0]) > abs(box1_c[1]-box2_c[1]): # CT 横向
+        if box1_c[0] < box2_c[0]: # CT 在右
+            rotate_angle = 0
+        else: # CT 在左
             rotate_angle = 180
-    else: # 证件 竖向
-        if box1_c[1] < box2_c[1]: # CT在下
+    else: # CT 纵向
+        if box1_c[1] < box2_c[1]: # CT 在下
             rotate_angle = 270
-        else:
+        else: # CT 在上
             rotate_angle = 90
+
+    #print(rotate_angle)
 
     # 旋转
     crop_img = rotate_bound(crop_img, rotate_angle)
 
     basename = os.path.basename(test_path)
-    cv2.imwrite(f'data/{basename}', crop_img)
+    label = basename.split('_')[1][:3]
+    cv2.imwrite(f'{output_path}/{label}/{basename}', crop_img)
 
-    # 划线
     cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
         True, color=(0, 255, 0), thickness=2)
     cv2.polylines(img, [np.array([ [p2[0], p2[1]], [p2[2], p2[1]], [p2[2], p2[3]], [p2[0], p2[3]] ], np.int32)], 
         True, color=(0, 255, 0), thickness=2)
-    cv2.imwrite('data/test_result.jpg', img)
-
+    cv2.imwrite(f'{output_path}/test_result.jpg', img)    
 
 
 def predict(inputs, h, w): # h,w 为原始图片的 尺寸
     start_time = datetime.now()
     results = model.predict(inputs)
-    print('[Time taken: {!s}]'.format(datetime.now() - start_time))
+    #print('[Time taken: {!s}]'.format(datetime.now() - start_time))
 
     p1 = (
         results[0][0]*w,
@@ -201,4 +202,4 @@ if __name__ == '__main__':
         if truth is not None:
             #print(truth)
             #print(pred)
-            print('IoU = ', IoU(truth, pred[0]))
+            print(ff, 'IoU = ', IoU(truth, pred[0]))
