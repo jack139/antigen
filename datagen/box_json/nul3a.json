@@ -1,0 +1,42 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          53.0,
+          295.1904761904762
+        ],
+        [
+          243.47619047619048,
+          513.2857142857142
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    },
+    {
+      "label": "CT",
+      "points": [
+        [
+          188.23809523809524,
+          339.95238095238096
+        ],
+        [
+          237.7619047619047,
+          458.04761904761904
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/nul3a.png",
+  "imageData": null,
+  "imageHeight": 815,
+  "imageWidth": 289
+}

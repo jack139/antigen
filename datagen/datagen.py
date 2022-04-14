@@ -1,5 +1,5 @@
 from os import path, mkdir
-from PIL import Image
+from PIL import Image, ImageFilter
 import numpy as np
 from tqdm import tqdm
 import math
@@ -19,20 +19,21 @@ if not path.exists(output_json_folder):
 backgrounds = [
     "1", "2", "2a", "3", "3a", 
     "4", "4a", "5", "6", "7", 
-    "8", "5a", "6a", "7a", "8a"
+    "8", "5a", "6a", "7a", "8a",
+    "1a", "9", "9a", "10", "10a",
 ]
-backgrounds_p = [
-    0.09, 0.09, 0.09, 0.09, 0.09,
-    0.02, 0.02, 0.02, 0.02, 0.02,
-    0.09, 0.09, 0.09, 0.09, 0.09,
-]
+backgrounds_p = [0.05]*20
 characters = [
     "neg1", "fal1", "nul1", "pos1",
     "neg2", "fal2", "nul2", "pos2",
     "neg3", "fal3", "nul3", "pos3",
     "neg4", "fal4", "nul4", "pos4",
+    "neg1a", "fal1a", "nul1a", "pos1a",
+    "neg2a", "fal2a", "nul2a", "pos2a",
+    "neg3a", "fal3a", "nul3a", "pos3a",
+    "neg4a", "fal4a", "nul4a", "pos4a",
 ]
-characters_p = [0.0625]*16
+characters_p = [0.03125]*32
 objects = ["none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-L"]
 objects_p = [0.4, 0.1, 0.05, 0.1, 0.05, 0.1, 0.1, 0.1]
 angels = [0, 90, 180, 270]
@@ -216,6 +217,9 @@ def generate_image(background, character, object, file_name):
         coordinates2 = (coordinates[0]+x_offset, coordinates[1]+y_offset) #x, y
 
         background_image.paste(object_image, coordinates2, mask=object_image)
+
+    # 噪声
+    background_image = background_image.filter(ImageFilter.GaussianBlur(np.random.randint(2)))
 
     file_name = f"{file_name}.jpg"
     output_file = path.join(output_folder, file_name)
