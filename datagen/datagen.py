@@ -24,7 +24,7 @@ backgrounds = [
 ]
 backgrounds_p = [0.05]*20
 characters = [
-    "neg1", "fal1", "nul1", "pos1",
+    "neg1", "fal1", "none", "pos1", # nul1 不用，用 none, 表示空
     "neg2", "fal2", "nul2", "pos2",
     "neg3", "fal3", "nul3", "pos3",
     "neg4", "fal4", "nul4", "pos4",
@@ -85,50 +85,56 @@ def generate_json(character, background_size, character_size, coordinates, rotat
         print('label err! ', json_file)
         return None
 
-    p1[0][0] //= resize_ratio
-    p1[0][1] //= resize_ratio
-    p1[1][0] //= resize_ratio
-    p1[1][1] //= resize_ratio
+    if character=='none':
+        p1 = [ [0, 0], [0, 0] ]
+        p2 = [ [0, 0], [0, 0] ]
 
-    # 保证左上、右下两个点
-    if rotate_angle==0 or rotate_angle==180:
-        p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
-        p1[1][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
     else:
-        tmp_x, tmp_y = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
-        p1[0][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
-        p1[1][0], p1[0][1] = tmp_x, tmp_y
+        p1[0][0] //= resize_ratio
+        p1[0][1] //= resize_ratio
+        p1[1][0] //= resize_ratio
+        p1[1][1] //= resize_ratio
 
-    p1[0][0] += coordinates[0]
-    p1[0][1] += coordinates[1]
-    p1[1][0] += coordinates[0]
-    p1[1][1] += coordinates[1]
+        # 保证左上、右下两个点
+        if rotate_angle==0 or rotate_angle==180:
+            p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
+            p1[1][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
+        else:
+            tmp_x, tmp_y = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
+            p1[0][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
+            p1[1][0], p1[0][1] = tmp_x, tmp_y
 
-    p2[0][0] //= resize_ratio
-    p2[0][1] //= resize_ratio
-    p2[1][0] //= resize_ratio
-    p2[1][1] //= resize_ratio
+        p1[0][0] += coordinates[0]
+        p1[0][1] += coordinates[1]
+        p1[1][0] += coordinates[0]
+        p1[1][1] += coordinates[1]
 
-    # 保证左上、右下两个点
-    if rotate_angle==0 or rotate_angle==180:
-        p2[0][0], p2[0][1] = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
-        p2[1][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
-    else:
-        tmp_x, tmp_y = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
-        p2[0][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
-        p2[1][0], p2[0][1] = tmp_x, tmp_y
+        p2[0][0] //= resize_ratio
+        p2[0][1] //= resize_ratio
+        p2[1][0] //= resize_ratio
+        p2[1][1] //= resize_ratio
 
-    p2[0][0] += coordinates[0]
-    p2[0][1] += coordinates[1]
-    p2[1][0] += coordinates[0]
-    p2[1][1] += coordinates[1]
+        # 保证左上、右下两个点
+        if rotate_angle==0 or rotate_angle==180:
+            p2[0][0], p2[0][1] = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
+            p2[1][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
+        else:
+            tmp_x, tmp_y = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
+            p2[0][0], p2[1][1] = rotate_xy(p2[1][0], p2[1][1], rotate_angle, character_size)
+            p2[1][0], p2[0][1] = tmp_x, tmp_y
 
-    # 调整坐标顺序
-    if p1[0][0]>p1[1][0]:
-        p1[0], p1[1] = p1[1], p1[0]
+        p2[0][0] += coordinates[0]
+        p2[0][1] += coordinates[1]
+        p2[1][0] += coordinates[0]
+        p2[1][1] += coordinates[1]
 
-    if p2[0][0]>p2[1][0]:
-        p2[0], p2[1] = p2[1], p2[0]
+        # 调整坐标顺序
+        if p1[0][0]>p1[1][0]:
+            p1[0], p1[1] = p1[1], p1[0]
+
+        if p2[0][0]>p2[1][0]:
+            p2[0], p2[1] = p2[1], p2[0]
+
 
     j['imagePath'] = f'../generated/{generated_filename}'
 
@@ -155,7 +161,9 @@ def generate_image(background, character, object, file_name):
     background_file = path.join("backgrounds", f"{background}.png")
     background_image = Image.open(background_file)
 
-    (width, height) = (background_image.width // resize_ratio, background_image.height // resize_ratio)
+    # 背景随机缩放，1、2、3倍
+    background_ration = np.random.randint(1, 4)
+    (width, height) = (background_image.width // background_ration, background_image.height // background_ration)
     background_image = background_image.resize((width, height))
 
     #Create character
@@ -176,8 +184,6 @@ def generate_image(background, character, object, file_name):
     coordinates = (
         xx + np.random.randint(-xx//2, xx//2),
         yy + np.random.randint(-yy//2, yy//2)
-        #np.random.randint(0,background_image.width-character_image.width), 
-        #np.random.randint(0,background_image.height-character_image.height)
     ) #x, y
 
     background_image.paste(character_image, coordinates, mask=character_image)
@@ -257,5 +263,5 @@ def generate_random_imgs(total_imgs):
 
 
 if __name__ == "__main__":
-    generate_random_imgs(20)
+    generate_random_imgs(100)
 

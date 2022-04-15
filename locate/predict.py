@@ -22,6 +22,7 @@ if not os.path.exists(output_path):
     os.mkdir(f"{output_path}/fal")
     os.mkdir(f"{output_path}/neg")
     os.mkdir(f"{output_path}/pos")
+    os.mkdir(f"{output_path}/non")
 
 #model = get_model('mobile', input_size=input_size, weights=None)
 #model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
