@@ -18,7 +18,7 @@ def hello_world():
 app.register_blueprint(demo_app)
 
 # 抗原试剂盒识别api，同步调用，异步处理（使用消息队列）
-api.add_resource(OCRBankCard, '/antigen/check')
+api.add_resource(DetposCheck, '/antigen/check')
 
 # 压测空接口
 api.add_resource(StressTest, '/test/stress')

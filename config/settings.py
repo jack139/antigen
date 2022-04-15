@@ -2,36 +2,24 @@
 
 ############# 算法相关设置
 
-# ctpn 预训练权重的路径
-CTPN_CHECKPOINT = '/home/tao/Codes/cv/ocr_model/ctpn/'
+# detpos 预训练权重的路径
+DETPOS_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/detpos_vgg16_b512_e30_18_1.00000.h5'
 
-# 数字识别模型 权重文件
-VGG_B_CTC_WEIGHTS = '/home/tao/Codes/cv/ocr_model/vgg_b_ctc_weight.h5'
-
-# densenet 预训练权重的路径
-#DENSENET_WEIGHTS = '/home/tao/Codes/cv/ocr_model/weights_densenet.h5'
-DENSENET_WEIGHTS = '/home/tao/Codes/cv/ocr_model/ocr-densenet-01-0.9318-0.0749-0.9848.weights'
-
-# locard 预训练权重的路径
-LOCARD_WEIGHTS = '/home/tao/Codes/cv/ocr_model/locard_vgg16_b32_e10_100_0.94010.h5'
+# locate 预训练权重的路径
+LOCATE_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/locate_vgg16_b128_e30_71_0.98894.h5'
 
 
 # 模型预热图片 路径
 WARM_UP_IMAGES = '../warmup'
 
 # GPU 内存设置
-GPU_MEMORY_CTPN = 0.2
-GPU_MEMORY_DENSENET = 0.00001
-GPU_MEMORY_CTC = 0.1
-GPU_MEMORY_LOCARD = 0.00001
-GPU_RUN_DENSENET = False
-GPU_RUN_CTC = False
-GPU_RUN_LOCARD = False
+GPU_MEMORY_LOCATE = 0.00001
+GPU_RUN_LOCATE = False
 
 ############  app server 相关设置
 
-APP_NAME = 'cardnum'
-APP_NAME_FORMATED = 'CARDNUM'
+APP_NAME = 'antigen'
+APP_NAME_FORMATED = 'ANTIGEN'
 
 # 参数设置
 DEBUG_MODE = False
@@ -40,7 +28,7 @@ BIND_PORT = '5000'
 
 # 是否保存请求的图片和结果
 SAVE_IMAGE = True
-SAVE_IMAGE_PATH = '/tmp/cardnum'
+SAVE_IMAGE_PATH = '/tmp/antigen'
 
 # dispatcher 中 最大线程数
 MAX_DISPATCHER_WORKERS = 8

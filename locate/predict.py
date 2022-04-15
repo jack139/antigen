@@ -28,7 +28,7 @@ if not os.path.exists(output_path):
 #model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
 
 model = get_model('vgg16', input_size=input_size, weights=None)
-model.load_weights("./locate_vgg16_b128_e30_71_0.98894.h5")
+model.load_weights("../ckpt/locate_vgg16_b128_e30_71_0.98894.h5")
 
 
 def read_img(test_path,target_size = (224,224)):

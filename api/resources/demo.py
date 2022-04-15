@@ -43,7 +43,6 @@ def demo_post():
 # 调用接口
 def call_api(cate, img_data):
     hostname = '127.0.0.1'
-    cate = cate
 
     body = {
         'version'  : '1',
@@ -78,12 +77,7 @@ def call_api(cate, img_data):
     pool = urllib3.PoolManager(num_pools=2, timeout=180, retries=False)
 
     host = 'http://%s:5000'%hostname
-    if cate == 'bank':
-        url = host+'/ocr/bankcard'
-    elif cate == 'id':
-        url = host+'/ocr/idcard'
-    else:
-        url = host+'/ocr/text'
+    url = host+'/antigen/check'
 
     start_time = datetime.now()
     r = pool.urlopen('POST', url, body=body_str)

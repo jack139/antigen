@@ -25,7 +25,7 @@ def process_api(request_id, request_msg):
         if request['api']=='detpos_check': # 识别试剂盒
             r = api_func.detpos_check(request_id, request['image'])
             # 准备结果
-            result = { 'code' : 200, 'data' : { 'msg':'success', 'card_number' : r, 'request_id' : request_id} }
+            result = { 'code' : 200, 'data' : { 'msg':'success', 'result' : r, 'request_id' : request_id} }
 
         elif request['api']=='stress_test': # 压测
             logger.error('stress_test delay: %.4f seconds'%request['delay']) 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     print('Request queue NO. ', queue_no)
 
     # 模型预热
-    api_func.warm_up()
+    #api_func.warm_up()
 
     sys.stdout.flush()
 
