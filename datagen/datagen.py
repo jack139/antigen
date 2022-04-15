@@ -34,7 +34,7 @@ characters = [
     "neg4a", "fal4a", "nul4a", "pos4a",
 ]
 characters_p = [0.03125]*32
-objects = ["none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-L"]
+objects = ["none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D"]
 objects_p = [0.4, 0.1, 0.05, 0.1, 0.05, 0.1, 0.1, 0.1]
 angels = [0, 90, 180, 270]
 angels_p = [0.25, 0.25, 0.25, 0.25]
@@ -195,24 +195,38 @@ def generate_image(background, character, object, file_name):
 
         if object_pos=='R': # 在右侧
             if rotate_angle==0 or rotate_angle==180:
-                x_offset = character_image.width+np.random.randint(-5, 0)
-                y_offset = np.random.randint(-80, -50)
+                x_offset = character_image.width+np.random.randint(-20, 0)
+                y_offset = np.random.randint(-50, -10)
             else:
-                x_offset = character_image.width+np.random.randint(-50, -30)
-                y_offset = np.random.randint(-80, -50)
+                #x_offset = character_image.width+np.random.randint(-character_image.width//3, 0)
+                x_offset = character_image.width-character_image.width//3
+                y_offset = np.random.randint(-50, -10)
         elif object_pos=='L': # 在左侧
             if rotate_angle==0 or rotate_angle==180:
-                x_offset = -object_image.width+np.random.randint(0, 5)
-                y_offset = np.random.randint(-80, -50)
+                x_offset = -object_image.width+np.random.randint(0, 20)
+                y_offset = np.random.randint(-50, -10)
             else:
-                x_offset = -object_image.width+np.random.randint(30, 50)
-                y_offset = np.random.randint(-80, -50)
+                #x_offset = -object_image.width+np.random.randint(0, character_image.width//3)
+                x_offset = -object_image.width+character_image.width//3
+                y_offset = np.random.randint(-50, -10)
         elif object_pos=='U': # 在上面
-            x_offset = np.random.randint(-80, -30)
-            y_offset = -object_image.height+np.random.randint(0, 5)
+            if rotate_angle==0 or rotate_angle==180:
+                x_offset = np.random.randint(-80, -30)
+                #y_offset = -object_image.height+np.random.randint(0, character_image.height//3)
+                y_offset = -object_image.height+character_image.height//3
+
+            else:
+                x_offset = np.random.randint(-80, -30)
+                y_offset = -object_image.height+np.random.randint(0, 5)
         else: # 在下面
-            x_offset = np.random.randint(-80, -30)
-            y_offset = character_image.height+np.random.randint(-5, 0)
+            if rotate_angle==0 or rotate_angle==180:
+                x_offset = np.random.randint(-80, -30)
+                #y_offset = character_image.height+np.random.randint(-character_image.height//3, 0)
+                y_offset = character_image.height-character_image.height//3
+
+            else:
+                x_offset = np.random.randint(-80, -30)
+                y_offset = character_image.height+np.random.randint(-5, 0)
 
         coordinates2 = (coordinates[0]+x_offset, coordinates[1]+y_offset) #x, y
 
@@ -249,5 +263,5 @@ def generate_random_imgs(total_imgs):
 
 
 if __name__ == "__main__":
-    generate_random_imgs(10000)
+    generate_random_imgs(20)
 
