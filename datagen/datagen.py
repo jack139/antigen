@@ -198,32 +198,26 @@ def generate_image(background, character, object, file_name):
                 x_offset = character_image.width+np.random.randint(-20, 0)
                 y_offset = np.random.randint(-50, -10)
             else:
-                #x_offset = character_image.width+np.random.randint(-character_image.width//3, 0)
-                x_offset = character_image.width-character_image.width//3
+                x_offset = character_image.width+np.random.randint(-character_image.width//3, 0)
                 y_offset = np.random.randint(-50, -10)
         elif object_pos=='L': # 在左侧
             if rotate_angle==0 or rotate_angle==180:
                 x_offset = -object_image.width+np.random.randint(0, 20)
                 y_offset = np.random.randint(-50, -10)
             else:
-                #x_offset = -object_image.width+np.random.randint(0, character_image.width//3)
-                x_offset = -object_image.width+character_image.width//3
+                x_offset = -object_image.width+np.random.randint(0, character_image.width//3)
                 y_offset = np.random.randint(-50, -10)
         elif object_pos=='U': # 在上面
             if rotate_angle==0 or rotate_angle==180:
                 x_offset = np.random.randint(-80, -30)
-                #y_offset = -object_image.height+np.random.randint(0, character_image.height//3)
-                y_offset = -object_image.height+character_image.height//3
-
+                y_offset = -object_image.height+np.random.randint(0, character_image.height//3)
             else:
                 x_offset = np.random.randint(-80, -30)
                 y_offset = -object_image.height+np.random.randint(0, 5)
         else: # 在下面
             if rotate_angle==0 or rotate_angle==180:
                 x_offset = np.random.randint(-80, -30)
-                #y_offset = character_image.height+np.random.randint(-character_image.height//3, 0)
-                y_offset = character_image.height-character_image.height//3
-
+                y_offset = character_image.height+np.random.randint(-character_image.height//3, 0)
             else:
                 x_offset = np.random.randint(-80, -30)
                 y_offset = character_image.height+np.random.randint(-5, 0)
