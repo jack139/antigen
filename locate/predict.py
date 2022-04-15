@@ -205,7 +205,7 @@ if __name__ == '__main__':
     for ff in tqdm(file_list):
         inputs, h, w = read_img(ff, target_size=input_size[:2])
         p1, p2, pred = predict(inputs, h, w)
-        if pred.sum()<1: # 没有试剂盒
+        if pred.sum()<1e-2: # 没有试剂盒
             print("Nothing found!")
         else:
             draw_box(ff, p1, p2)
