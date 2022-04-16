@@ -17,30 +17,6 @@
       "group_id": null,
       "shape_type": "rectangle",
       "flags": {}
-    },
-    {
-      "label": "C",
-      "points": [
-        [
-          195.53658536585363,
-          363.6341463414634
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
-    },
-    {
-      "label": "T",
-      "points": [
-        [
-          196.75609756097555,
-          420.9512195121951
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
     }
   ],
   "imagePath": "../characters/pos1.png",

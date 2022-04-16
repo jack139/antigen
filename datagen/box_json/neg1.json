@@ -17,30 +17,6 @@
       "group_id": null,
       "shape_type": "rectangle",
       "flags": {}
-    },
-    {
-      "label": "C",
-      "points": [
-        [
-          196.75609756097555,
-          362.4146341463414
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
-    },
-    {
-      "label": "T",
-      "points": [
-        [
-          194.31707317073165,
-          420.9512195121951
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
     }
   ],
   "imagePath": "../characters/neg1.png",

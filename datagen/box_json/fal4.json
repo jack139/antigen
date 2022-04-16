@@ -17,30 +17,6 @@
       "group_id": null,
       "shape_type": "rectangle",
       "flags": {}
-    },
-    {
-      "label": "C",
-      "points": [
-        [
-          204.07317073170725,
-          359.9756097560975
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
-    },
-    {
-      "label": "T",
-      "points": [
-        [
-          202.85365853658527,
-          417.29268292682923
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
     }
   ],
   "imagePath": "../characters/fal4.png",

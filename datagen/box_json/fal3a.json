@@ -17,30 +17,6 @@
       "group_id": null,
       "shape_type": "rectangle",
       "flags": {}
-    },
-    {
-      "label": "C",
-      "points": [
-        [
-          207.8765432098765,
-          366.9012345679012
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
-    },
-    {
-      "label": "T",
-      "points": [
-        [
-          205.4074074074074,
-          424.9259259259259
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
     }
   ],
   "imagePath": "../characters/fal3a.png",

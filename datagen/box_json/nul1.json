@@ -17,30 +17,6 @@
       "group_id": null,
       "shape_type": "rectangle",
       "flags": {}
-    },
-    {
-      "label": "C",
-      "points": [
-        [
-          195.53658536585363,
-          361.1951219512195
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
-    },
-    {
-      "label": "T",
-      "points": [
-        [
-          194.31707317073165,
-          417.29268292682923
-        ]
-      ],
-      "group_id": null,
-      "shape_type": "point",
-      "flags": {}
     }
   ],
   "imagePath": "../characters/nul1.png",

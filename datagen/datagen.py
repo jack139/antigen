@@ -75,18 +75,14 @@ def generate_json(character, background_size, character_size, coordinates, rotat
     j['imageWidth'] = background_size[0]
     j['imageHeight'] = background_size[1]
 
-    if j['shapes'][0]['label']=='box' and j['shapes'][1]['label']=='C' and j['shapes'][2]['label']=='T':
+    if j['shapes'][0]['label']=='box':
         p1 = j['shapes'][0]['points']
-        p2 = j['shapes'][1]['points']
-        p3 = j['shapes'][2]['points']
     else:
         print('label err! ', json_file)
         return None
 
     if character=='none':
-        p1 = [ [0, 0], [0, 0] ]
-        p2 = [ [0, 0] ]
-        p3 = [ [0, 0] ]
+        p1[0], p1[1] = [0, 0], [0, 0]
 
     else:
         p1[0][0] //= resize_ratio
@@ -94,6 +90,10 @@ def generate_json(character, background_size, character_size, coordinates, rotat
         p1[1][0] //= resize_ratio
         p1[1][1] //= resize_ratio
 
+        p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
+        p1[1][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
+
+        '''
         # 保证左上、右下两个点
         if rotate_angle==0 or rotate_angle==180:
             p1[0][0], p1[0][1] = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
@@ -102,33 +102,16 @@ def generate_json(character, background_size, character_size, coordinates, rotat
             tmp_x, tmp_y = rotate_xy(p1[0][0], p1[0][1], rotate_angle, character_size)
             p1[0][0], p1[1][1] = rotate_xy(p1[1][0], p1[1][1], rotate_angle, character_size)
             p1[1][0], p1[0][1] = tmp_x, tmp_y
+        '''
 
         p1[0][0] += coordinates[0]
         p1[0][1] += coordinates[1]
         p1[1][0] += coordinates[0]
         p1[1][1] += coordinates[1]
 
-        p2[0][0] //= resize_ratio
-        p2[0][1] //= resize_ratio
-
-        # 保证左上、右下两个点
-        p2[0][0], p2[0][1] = rotate_xy(p2[0][0], p2[0][1], rotate_angle, character_size)
-
-        p2[0][0] += coordinates[0]
-        p2[0][1] += coordinates[1]
-
-        p3[0][0] //= resize_ratio
-        p3[0][1] //= resize_ratio
-
-        # 保证左上、右下两个点
-        p3[0][0], p3[0][1] = rotate_xy(p3[0][0], p3[0][1], rotate_angle, character_size)
-
-        p3[0][0] += coordinates[0]
-        p3[0][1] += coordinates[1]
-
         # 调整坐标顺序
-        if p1[0][0]>p1[1][0]:
-            p1[0], p1[1] = p1[1], p1[0]
+        #if p1[0][0]>p1[1][0]:
+        #    p1[0], p1[1] = p1[1], p1[0]
 
 
     j['imagePath'] = f'../generated/{generated_filename}'
@@ -258,5 +241,5 @@ def generate_random_imgs(total_imgs):
 
 
 if __name__ == "__main__":
-    generate_random_imgs(1000)
+    generate_random_imgs(100)
 
