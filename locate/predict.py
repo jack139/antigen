@@ -94,7 +94,7 @@ def rotate_bound(image,angle):
     
     return cv2.warpAffine(image,M,(nW,nH))
 
-def draw_box(test_path, p1, p2, p3):
+def draw_box(test_path, p1):
     img = cv2.imread(test_path)
 
     # 截图 box
@@ -105,7 +105,7 @@ def draw_box(test_path, p1, p2, p3):
     box1 = p1
 
     # 计算box1 box2 的中心
-    box1_c = [ (box1[2]-box1[0])/2+box1[0], (box1[3]-box1[1])/2+box1[1] ]
+    #box1_c = [ (box1[2]-box1[0])/2+box1[0], (box1[3]-box1[1])/2+box1[1] ]
     #box2_c = [ (box2[2]-box2[0])/2+box2[0], (box2[3]-box2[1])/2+box2[1] ]
 
     '''
@@ -136,8 +136,6 @@ def draw_box(test_path, p1, p2, p3):
     # 画框
     cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
         True, color=(0, 255, 0), thickness=2)
-    cv2.circle(img, (int(p2[0]), int(p2[1])), radius=1, color=(0, 255, 0), thickness=4)
-    cv2.circle(img, (int(p3[0]), int(p3[1])), radius=1, color=(0, 255, 0), thickness=4)
     cv2.imwrite(f'{output_path}/test_result.jpg', img)    
 
 
@@ -153,17 +151,7 @@ def predict(inputs, h, w): # h,w 为原始图片的 尺寸
         results[0][3]*h,
     )
 
-    p2 = (
-        results[0][4]*w,
-        results[0][5]*h,
-    )
-
-    p3 = (
-        results[0][6]*w,
-        results[0][7]*h,
-    )
-
-    return p1, p2, p3, results
+    return p1, results
 
 
 def IoU(y_true, y_pred):
@@ -208,11 +196,11 @@ if __name__ == '__main__':
 
     for ff in tqdm(file_list):
         inputs, h, w = read_img(ff, target_size=input_size[:2])
-        p1, p2, p3, pred = predict(inputs, h, w)
+        p1, pred = predict(inputs, h, w)
         if pred.sum()<1e-2: # 没有试剂盒
             print("Nothing found!")
         else:
-            draw_box(ff, p1, p2, p3)
+            draw_box(ff, p1)
 
         if compu_iou:
             # 计算IoU

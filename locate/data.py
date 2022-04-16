@@ -25,10 +25,8 @@ def dataGenerator(data_path,json_path,batch_size=64,target_size = (224,224)):
             ratio_x = 1.0 / j['imageWidth']
             ratio_y = 1.0 / j['imageHeight']
 
-            if j['shapes'][0]['label']=='box' and j['shapes'][1]['label']=='C' and j['shapes'][2]['label']=='T':
+            if j['shapes'][0]['label']=='box':
                 p1 = j['shapes'][0]['points']
-                p2 = j['shapes'][1]['points']
-                p3 = j['shapes'][2]['points']
             else:
                 print('label err! ', i)
                 continue
@@ -38,10 +36,6 @@ def dataGenerator(data_path,json_path,batch_size=64,target_size = (224,224)):
                 p1[0][1]*ratio_y,
                 p1[1][0]*ratio_x,
                 p1[1][1]*ratio_y,
-                p2[0][0]*ratio_x, # C
-                p2[0][1]*ratio_y,
-                p3[0][0]*ratio_x, # T
-                p3[0][1]*ratio_y,                
             ])
 
             # 准备图片

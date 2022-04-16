@@ -225,5 +225,5 @@ def generate_random_imgs(total_imgs):
 
 
 if __name__ == "__main__":
-    generate_random_imgs(100)
+    generate_random_imgs(1000)
 

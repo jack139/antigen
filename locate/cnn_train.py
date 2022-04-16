@@ -8,8 +8,8 @@ from keras.optimizers import Adam, SGD, RMSprop
 from keras.callbacks import ModelCheckpoint
 from data import dataGenerator
 from model import get_model
-from loss import SumLoss
-from metrics import iou_metric, distance_metrics
+from loss import iou_loss
+from metrics import iou_metric
 
 train_dir = '../data/train'
 train_json = '../data/json'
@@ -38,7 +38,7 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 model = get_model(model_type, input_size=input_size, freeze=freeze)
 #model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
 
-model.compile(loss=SumLoss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric, distance_metrics])
+model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric, distance_metrics])
 
 print(model.summary())
 

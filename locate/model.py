@@ -50,7 +50,7 @@ def get_model(model_type='vgg16', input_size = (224,224,3), freeze=False, weight
     #bboxHead = LeakyReLU(alpha=0.02)(bboxHead)
     #bboxHead = Dropout(0.2)(bboxHead)
 
-    bboxHead = Dense(8, activation="sigmoid")(bboxHead)
+    bboxHead = Dense(4, activation="sigmoid")(bboxHead)
     # construct the model we will fine-tune for bounding box regression
     model = Model(inputs=base_model.input, outputs=bboxHead)
 
