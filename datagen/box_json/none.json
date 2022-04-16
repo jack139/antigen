@@ -6,12 +6,8 @@
       "label": "box",
       "points": [
         [
-          0,
-          0
-        ],
-        [
-          0,
-          0
+          0.0,
+          0.0
         ]
       ],
       "group_id": null,
@@ -19,19 +15,27 @@
       "flags": {}
     },
     {
-      "label": "CT",
+      "label": "C",
       "points": [
         [
-          0,
-          0
-        ],
-        [
-          0,
-          0
+          0.0,
+          0.0
         ]
       ],
       "group_id": null,
-      "shape_type": "rectangle",
+      "shape_type": "point",
+      "flags": {}
+    },
+    {
+      "label": "T",
+      "points": [
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "point",
       "flags": {}
     }
   ],

@@ -19,19 +19,27 @@
       "flags": {}
     },
     {
-      "label": "CT",
+      "label": "C",
       "points": [
         [
-          183.0,
-          350.9433962264151
-        ],
-        [
-          229.2264150943396,
-          461.3207547169811
+          207.64197530864192,
+          374.3086419753086
         ]
       ],
       "group_id": null,
-      "shape_type": "rectangle",
+      "shape_type": "point",
+      "flags": {}
+    },
+    {
+      "label": "T",
+      "points": [
+        [
+          205.1728395061728,
+          431.09876543209873
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "point",
       "flags": {}
     }
   ],
