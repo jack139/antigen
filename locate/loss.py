@@ -41,5 +41,20 @@ def iou_loss(y_true, y_pred, left_right=0):
 
     return iou_loss
 
-def IoULoss(y_true, y_pred):
-    return iou_loss(y_true, y_pred, 0) + iou_loss(y_true, y_pred, 1)
+def distance_loss(y_true, y_pred, left_right=1):
+    # input must be as [x1, y1, x2, y2]
+    
+    offset = left_right*4
+
+    xx1 = K.abs(K.transpose(y_true)[0+offset] - K.transpose(y_pred)[0+offset]) 
+    yy1 = K.abs(K.transpose(y_true)[1+offset] - K.transpose(y_pred)[1+offset])
+    xx2 = K.abs(K.transpose(y_true)[2+offset] - K.transpose(y_pred)[2+offset]) 
+    yy2 = K.abs(K.transpose(y_true)[3+offset] - K.transpose(y_pred)[3+offset])
+
+    distance1 = K.sqrt(K.square(xx1) + K.square(yy1)) 
+    distance2 = K.sqrt(K.square(xx2) + K.square(yy2))
+
+    return distance1 + distance2
+
+def SumLoss(y_true, y_pred):
+    return iou_loss(y_true, y_pred) + distance_loss(y_true, y_pred)

@@ -8,8 +8,8 @@ from keras.optimizers import Adam, SGD, RMSprop
 from keras.callbacks import ModelCheckpoint
 from data import dataGenerator
 from model import get_model
-from loss import IoULoss
-from metrics import IoU, IoU2
+from loss import SumLoss
+from metrics import iou_metric, distance_metrics
 
 train_dir = '../data/train'
 train_json = '../data/json'
@@ -38,7 +38,7 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 model = get_model(model_type, input_size=input_size, freeze=freeze)
 #model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
 
-model.compile(loss=IoULoss, optimizer=Adam(lr=learning_rate), metrics=[IoU, IoU2])
+model.compile(loss=SumLoss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric, distance_metrics])
 
 print(model.summary())
 
@@ -47,10 +47,10 @@ print(f"train data: {train_num}\tdev data: {val_num}")
 # train the network for bounding box regression
 print("[INFO] training bounding box regressor...")
 
-ckpt_filepath = "locate_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_steps_per_epoch)
+ckpt_filepath = "locate2_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_steps_per_epoch)
 
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
-    monitor='val_IoU',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
+    monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
 
 #model.load_weights("./locate_mobile_b128_e30_71_0.97200.h5")
 

@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 input_size = (256,256,3)
 
-json_path = '../datagen/data/json2'
+json_path = '../data/json'
 
 output_path = './data/test'
 
@@ -28,7 +28,7 @@ if not os.path.exists(output_path):
 #model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
 
 model = get_model('vgg16', input_size=input_size, weights=None)
-model.load_weights("../ckpt/locate_vgg16_b128_e30_71_0.98256.h5")
+model.load_weights("../ckpt/locate2_vgg16_b128_e30_8_0.92793.h5")
 
 
 def read_img(test_path,target_size = (224,224)):
@@ -52,12 +52,10 @@ def read_json(test_path):
     ratio_x = 1.0 / j['imageWidth']
     ratio_y = 1.0 / j['imageHeight']
 
-    if j['shapes'][0]['label']=='box' and j['shapes'][1]['label']=='CT':
+    if j['shapes'][0]['label']=='box' and j['shapes'][1]['label']=='C' and j['shapes'][2]['label']=='T':
         p1 = j['shapes'][0]['points']
         p2 = j['shapes'][1]['points']
-    elif j['shapes'][0]['label']=='CT' and j['shapes'][1]['label']=='box':
-        p1 = j['shapes'][1]['points']
-        p2 = j['shapes'][0]['points']
+        p3 = j['shapes'][2]['points']
     else:
         print('label err! ', i)
         return None
@@ -69,8 +67,8 @@ def read_json(test_path):
         p1[1][1]*ratio_y,
         p2[0][0]*ratio_x, # photo
         p2[0][1]*ratio_y,
-        p2[1][0]*ratio_x,
-        p2[1][1]*ratio_y,                
+        p3[0][0]*ratio_x,
+        p3[0][1]*ratio_y,                
     ])
 
     return y
@@ -96,7 +94,7 @@ def rotate_bound(image,angle):
     
     return cv2.warpAffine(image,M,(nW,nH))
 
-def draw_box(test_path, p1, p2):
+def draw_box(test_path, p1, p2, p3):
     img = cv2.imread(test_path)
 
     # 截图 box
@@ -104,12 +102,13 @@ def draw_box(test_path, p1, p2):
   
     # 计算需选择角度
     rotate_angle = 0
-    box1, box2 = p1, p2
+    box1 = p1
 
     # 计算box1 box2 的中心
     box1_c = [ (box1[2]-box1[0])/2+box1[0], (box1[3]-box1[1])/2+box1[1] ]
-    box2_c = [ (box2[2]-box2[0])/2+box2[0], (box2[3]-box2[1])/2+box2[1] ]
+    #box2_c = [ (box2[2]-box2[0])/2+box2[0], (box2[3]-box2[1])/2+box2[1] ]
 
+    '''
     if abs(box1_c[0]-box2_c[0]) > abs(box1_c[1]-box2_c[1]): # CT 横向
         if box1_c[0] < box2_c[0]: # CT 在右
             rotate_angle = 0
@@ -132,11 +131,13 @@ def draw_box(test_path, p1, p2):
     else:
         label = ''
     cv2.imwrite(f'{output_path}/{label}/{basename}', crop_img)
+    '''
 
+    # 画框
     cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
         True, color=(0, 255, 0), thickness=2)
-    cv2.polylines(img, [np.array([ [p2[0], p2[1]], [p2[2], p2[1]], [p2[2], p2[3]], [p2[0], p2[3]] ], np.int32)], 
-        True, color=(0, 255, 0), thickness=2)
+    cv2.circle(img, (int(p2[0]), int(p2[1])), radius=1, color=(0, 255, 0), thickness=4)
+    cv2.circle(img, (int(p3[0]), int(p3[1])), radius=1, color=(0, 255, 0), thickness=4)
     cv2.imwrite(f'{output_path}/test_result.jpg', img)    
 
 
@@ -155,11 +156,14 @@ def predict(inputs, h, w): # h,w 为原始图片的 尺寸
     p2 = (
         results[0][4]*w,
         results[0][5]*h,
+    )
+
+    p3 = (
         results[0][6]*w,
         results[0][7]*h,
     )
 
-    return p1, p2, results
+    return p1, p2, p3, results
 
 
 def IoU(y_true, y_pred):
@@ -204,16 +208,16 @@ if __name__ == '__main__':
 
     for ff in tqdm(file_list):
         inputs, h, w = read_img(ff, target_size=input_size[:2])
-        p1, p2, pred = predict(inputs, h, w)
+        p1, p2, p3, pred = predict(inputs, h, w)
         if pred.sum()<1e-2: # 没有试剂盒
             print("Nothing found!")
         else:
-            draw_box(ff, p1, p2)
+            draw_box(ff, p1, p2, p3)
 
         if compu_iou:
             # 计算IoU
             truth = read_json(ff)
             if truth is not None:
-                #print(truth)
-                #print(pred)
+                print(truth)
+                print(pred)
                 print(ff, 'IoU = ', IoU(truth, pred[0]))
