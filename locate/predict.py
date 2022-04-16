@@ -91,28 +91,27 @@ def rotate_bound(image,angle):
 def draw_box(test_path, p1):
     img = cv2.imread(test_path)
 
-    # 截图 box
-    crop_img = img[int(p1[1]):int(p1[3]), int(p1[0]):int(p1[2])].copy()
-  
     # 计算需选择角度
     rotate_angle = 0
     box1 = p1
 
-    # 计算box1 box2 的中心
-    #box1_c = [ (box1[2]-box1[0])/2+box1[0], (box1[3]-box1[1])/2+box1[1] ]
-    #box2_c = [ (box2[2]-box2[0])/2+box2[0], (box2[3]-box2[1])/2+box2[1] ]
-
-    '''
-    if abs(box1_c[0]-box2_c[0]) > abs(box1_c[1]-box2_c[1]): # CT 横向
-        if box1_c[0] < box2_c[0]: # CT 在右
+    if box1[0]<box1[2]: # 起点 在左
+        if box1[1]<box1[3]: # 起点 在上
             rotate_angle = 0
-        else: # CT 在左
-            rotate_angle = 180
-    else: # CT 纵向
-        if box1_c[1] < box2_c[1]: # CT 在下
-            rotate_angle = 270
-        else: # CT 在上
+            x1, y1, x2, y2 = box1[0], box1[1], box1[2], box1[3]
+        else:
             rotate_angle = 90
+            x1, y1, x2, y2 = box1[0], box1[3], box1[2], box1[1]
+    else: # 起点 在右
+        if box1[1]<box1[3]: # 起点 在上
+            rotate_angle = 270
+            x1, y1, x2, y2 = box1[2], box1[1], box1[0], box1[3]
+        else:
+            rotate_angle = 180
+            x1, y1, x2, y2 = box1[2], box1[3], box1[0], box1[1]
+
+    # 截图 box
+    crop_img = img[int(y1):int(y2), int(x1):int(x2)].copy()
 
     #print(rotate_angle)
 
@@ -125,7 +124,6 @@ def draw_box(test_path, p1):
     else:
         label = ''
     cv2.imwrite(f'{output_path}/{label}/{basename}', crop_img)
-    '''
 
     # 画框
     cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
