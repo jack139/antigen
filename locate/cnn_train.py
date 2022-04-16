@@ -18,11 +18,11 @@ val_json = '../data/json'
 
 
 model_type = 'vgg16'
-freeze = False # 是否冻结 CNN 模型
+freeze = True # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
 batch_size = 128
 epochs = 30
-learning_rate = 1e-4
+learning_rate = 1e-5
 train_num = len(os.listdir(train_dir)) # 训练集 数量
 val_num = len(os.listdir(val_dir))
 train_steps_per_epoch = train_num // batch_size + 1 
@@ -38,7 +38,7 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 model = get_model(model_type, input_size=input_size, freeze=freeze)
 #model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
 
-model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric, distance_metrics])
+model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric])
 
 print(model.summary())
 
@@ -47,7 +47,7 @@ print(f"train data: {train_num}\tdev data: {val_num}")
 # train the network for bounding box regression
 print("[INFO] training bounding box regressor...")
 
-ckpt_filepath = "locate2_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_steps_per_epoch)
+ckpt_filepath = "locate_onebox_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_steps_per_epoch)
 
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
     monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max')

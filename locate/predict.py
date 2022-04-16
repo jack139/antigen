@@ -28,7 +28,7 @@ if not os.path.exists(output_path):
 #model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
 
 model = get_model('vgg16', input_size=input_size, weights=None)
-model.load_weights("../ckpt/locate2_vgg16_b128_e30_8_0.92793.h5")
+model.load_weights("../ckpt/locate_onebox_vgg16_b128_e30_8_0.79683.h5")
 
 
 def read_img(test_path,target_size = (224,224)):
@@ -52,10 +52,8 @@ def read_json(test_path):
     ratio_x = 1.0 / j['imageWidth']
     ratio_y = 1.0 / j['imageHeight']
 
-    if j['shapes'][0]['label']=='box' and j['shapes'][1]['label']=='C' and j['shapes'][2]['label']=='T':
+    if j['shapes'][0]['label']=='box':
         p1 = j['shapes'][0]['points']
-        p2 = j['shapes'][1]['points']
-        p3 = j['shapes'][2]['points']
     else:
         print('label err! ', i)
         return None
@@ -65,10 +63,6 @@ def read_json(test_path):
         p1[0][1]*ratio_y,
         p1[1][0]*ratio_x,
         p1[1][1]*ratio_y,
-        p2[0][0]*ratio_x, # photo
-        p2[0][1]*ratio_y,
-        p3[0][0]*ratio_x,
-        p3[0][1]*ratio_y,                
     ])
 
     return y
