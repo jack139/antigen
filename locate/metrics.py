@@ -10,12 +10,12 @@ def iou_metric(y_true, y_pred):
     # input must be as [x1, y1, x2, y2]
     
     # AOG = Area of Groundtruth box
-    AoG = K.abs(K.transpose(y_true)[2] - K.transpose(y_true)[0] + 1) \
-        * K.abs(K.transpose(y_true)[3] - K.transpose(y_true)[1] + 1)
+    AoG = K.abs(K.transpose(y_true)[2] - K.transpose(y_true)[0]) \
+        * K.abs(K.transpose(y_true)[3] - K.transpose(y_true)[1])
     
     # AOP = Area of Predicted box
-    AoP = K.abs(K.transpose(y_pred)[2] - K.transpose(y_pred)[0] + 1) \
-        * K.abs(K.transpose(y_pred)[3] - K.transpose(y_pred)[1] + 1)
+    AoP = K.abs(K.transpose(y_pred)[2] - K.transpose(y_pred)[0]) \
+        * K.abs(K.transpose(y_pred)[3] - K.transpose(y_pred)[1])
 
     # overlaps are the co-ordinates of intersection box
     overlap_0 = K.maximum(K.transpose(y_true)[0], K.transpose(y_pred)[0])
@@ -24,7 +24,7 @@ def iou_metric(y_true, y_pred):
     overlap_3 = K.minimum(K.transpose(y_true)[3], K.transpose(y_pred)[3])
 
     # intersection area
-    intersection = (overlap_2 - overlap_0 + 1) * (overlap_3 - overlap_1 + 1)
+    intersection = (overlap_2 - overlap_0) * (overlap_3 - overlap_1)
 
     # area of union of both boxes
     union = AoG + AoP - intersection

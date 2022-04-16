@@ -153,10 +153,10 @@ def IoU(y_true, y_pred):
     # input must be as [x1, y1, x2, y2]
 
     # AOG = Area of Groundtruth box
-    AoG = abs(y_true[2] - y_true[0] + 1) * abs(y_true[3] - y_true[1] + 1)
+    AoG = abs(y_true[2] - y_true[0]) * abs(y_true[3] - y_true[1])
     
     # AOP = Area of Predicted box
-    AoP = abs(y_pred[2] - y_pred[0] + 1) * abs(y_pred[3] - y_pred[1] + 1)
+    AoP = abs(y_pred[2] - y_pred[0]) * abs(y_pred[3] - y_pred[1])
 
     # overlaps are the co-ordinates of intersection box
     overlap_0 = max(y_true[0], y_pred[0])
@@ -165,7 +165,7 @@ def IoU(y_true, y_pred):
     overlap_3 = min(y_true[3], y_pred[3])
 
     # intersection area
-    intersection = (overlap_2 - overlap_0 + 1) * (overlap_3 - overlap_1 + 1)
+    intersection = (overlap_2 - overlap_0) * (overlap_3 - overlap_1)
 
     # area of union of both boxes
     union = AoG + AoP - intersection
