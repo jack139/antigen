@@ -52,7 +52,7 @@ ckpt_filepath = "locate_onebox_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,t
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
     monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
 
-model.load_weights("./locate_onebox_vgg16_b128_e30_141.h5")
+#model.load_weights("./locate_onebox_vgg16_b128_e30_141.h5")
 
 model.fit_generator(train_generator,
     steps_per_epoch=train_steps_per_epoch,
