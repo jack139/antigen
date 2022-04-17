@@ -11,10 +11,10 @@ from model import get_model
 from loss import IoULoss
 from metrics import IoU, IoU2
 
-train_dir = '../data/train'
-train_json = '../data/json'
-val_dir = '../data/dev'
-val_json = '../data/json'
+train_dir = '../data/twobox/train'
+train_json = '../data/twobox/json'
+val_dir = '../data/twobox/dev'
+val_json = '../data/twobox/json'
 
 
 model_type = 'vgg16'
