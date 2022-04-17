@@ -6,9 +6,6 @@ def iou_metric(y_true, y_pred):
     # iou as metric for bounding box regression
     # input must be as [x1, y1, x2, y2]
 
-    #y_true = y_true * 256
-    #y_pred = y_pred * 256
-
     w1 = K.abs(K.transpose(y_true)[2] - K.transpose(y_true)[0])
     w2 = K.abs(K.transpose(y_pred)[2] - K.transpose(y_pred)[0])
 

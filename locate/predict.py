@@ -150,23 +150,29 @@ def IoU(y_true, y_pred):
     # iou as metric for bounding box regression
     # input must be as [x1, y1, x2, y2]
 
-    # AOG = Area of Groundtruth box
-    AoG = abs(y_true[2] - y_true[0]) * abs(y_true[3] - y_true[1])
-    
-    # AOP = Area of Predicted box
-    AoP = abs(y_pred[2] - y_pred[0]) * abs(y_pred[3] - y_pred[1])
+    w1 = abs(y_true[2] - y_true[0])
+    w2 = abs(y_pred[2] - y_pred[0])
 
-    # overlaps are the co-ordinates of intersection box
-    overlap_0 = max(y_true[0], y_pred[0])
-    overlap_1 = max(y_true[1], y_pred[1])
-    overlap_2 = min(y_true[2], y_pred[2])
-    overlap_3 = min(y_true[3], y_pred[3])
+    h1 = abs(y_true[3] - y_true[1])
+    h2 = abs(y_pred[3] - y_pred[1])
+
+    dw1 = abs(y_true[0] - y_pred[0])
+    dw2 = abs(y_true[2] - y_pred[2])
+
+    dh1 = abs(y_true[1] - y_pred[1])
+    dh2 = abs(y_true[3] - y_pred[3])
+
+    w3 = (w1 + w2 - dw1 - dw2) / 2
+    h3 = (h1 + h2 - dh1 - dh2) / 2
+
+    w4 = w1 + w2 - w3
+    h4 = h1 + h2 - h3
 
     # intersection area
-    intersection = abs(overlap_2 - overlap_0) * abs(overlap_3 - overlap_1)
+    intersection = max(w3, 0) * max(h3, 0)
 
     # area of union of both boxes
-    union = AoG + AoP - intersection
+    union = w4 * h4
     
     # iou calculation
     iou = intersection / union

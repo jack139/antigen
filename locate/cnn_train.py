@@ -22,7 +22,7 @@ freeze = False # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
 batch_size = 128
 epochs = 30
-learning_rate = 8e-5
+learning_rate = 2e-5
 train_num = len(os.listdir(train_dir)) # 训练集 数量
 val_num = len(os.listdir(val_dir))
 train_steps_per_epoch = train_num // batch_size + 1 
@@ -52,7 +52,7 @@ ckpt_filepath = "locate_onebox_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,t
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
     monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
 
-#model.load_weights("./locate_mobile_b128_e30_71_0.97200.h5")
+model.load_weights("./locate_onebox_vgg16_b128_e30_141.h5")
 
 model.fit_generator(train_generator,
     steps_per_epoch=train_steps_per_epoch,
