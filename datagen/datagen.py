@@ -24,16 +24,15 @@ backgrounds = [
 ]
 backgrounds_p = [0.05]*20
 characters = [
-    "neg1", "fal1", "none", "pos1", # nul1 不用，用 none, 表示空
-    "neg2", "fal2", "nul2", "pos2",
-    "neg3", "fal3", "nul3", "pos3",
-    "neg4", "fal4", "nul4", "pos4",
-    "neg1a", "fal1a", "nul1a", "pos1a",
-    "neg2a", "fal2a", "nul2a", "pos2a",
-    "neg3a", "fal3a", "nul3a", "pos3a",
-    "neg4a", "fal4a", "nul4a", "pos4a",
+    "fal1a",  "fal_4a",  "fal_7",  "neg_2",  "neg_4",  "nul_2a",  "nul3",  "nul_7a",  "pos_3aa",  "pos_4",
+    "fal1",  "fal4a",  "neg_1a",  "neg_3a",  "neg_5a",  "nul2a",  "nul_4a",  "nul_7",  "pos_3ab",  "pos4",
+    "fal2a",  "fal_4",  "neg1a",  "neg3a",  "neg_5",  "nul_2",  "nul4a",  "pos1a",  "pos_3a",  "pos_5a",
+    "fal_3a",  "fal4",  "neg_1",  "neg_3",  "neg_7a",  "nul2",  "nul_4",  "pos_2a",  "pos3a",  "pos_5",
+    "fal3a",  "fal_5a",  "neg1",  "neg3",  "neg_7",  "nul_3a",  "nul4",  "pos2a",  "pos3",  "pos_7a",
+    "fal_3",  "fal_5",  "neg_2a",  "neg_4a",  "none",  "nul3a",  "nul_6a",  "pos_2",  "pos_4a",  "pos_7b",
+    "fal3",  "fal_7a",  "neg2a",  "neg4a",  "nul1a",  "nul_3",  "nul_6",  "pos2",  "pos4a",  "pos_7",
 ]
-characters_p = [0.03125]*32
+characters_p = [1/70]*70
 objects = ["none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D"]
 objects_p = [0.4, 0.1, 0.05, 0.1, 0.05, 0.1, 0.1, 0.1]
 angels = [0, 90, 180, 270]
@@ -205,7 +204,7 @@ def generate_image(background, character, object, file_name):
         coordinates, rotate_angle, file_name)
 
 
-def generate_random_imgs(total_imgs):
+def generate_random_imgs(prefix, total_imgs):
     """Generates a given number of random images according to predefined probabilities
 
     Args:
@@ -221,9 +220,34 @@ def generate_random_imgs(total_imgs):
         object = np.random.choice(np.arange(0,len(objects)), p=objects_p)
         object = objects[object]
 
-        generate_image(background, character, object, f"{num:06d}_{character[:3]}")
+        generate_image(background, character, object, f"{prefix}_{num:06d}_{character[:3]}")
 
+    return 'ok'
 
 if __name__ == "__main__":
-    generate_random_imgs(1000)
 
+    # 多线程生成图片
+    params = [ # prefix, image_count
+        (1, 5000),
+        (2, 5000),
+        (3, 5000),
+        (4, 5000),
+        (5, 5000),
+        (6, 5000),
+        (7, 5000),
+        (8, 5000),
+    ]
+
+    import concurrent.futures
+    import urllib.request
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        future_to_gemerate = {executor.submit(generate_random_imgs, p[0], p[1]): p for p in params}
+        for future in concurrent.futures.as_completed(future_to_gemerate):
+            f = future_to_gemerate[future]
+            try:
+                data = future.result()
+            except Exception as exc:
+                print('%r generated an exception: %s' % (f, exc))
+            else:
+                print('%r returned: %s' % (f, len(data)))
