@@ -21,14 +21,11 @@ def iou_metric(y_true, y_pred):
     w3 = (w1 + w2 - dw1 - dw2) / 2
     h3 = (h1 + h2 - dh1 - dh2) / 2
 
-    w4 = w1 + w2 - w3
-    h4 = h1 + h2 - h3
-
     # intersection area
     intersection = K.maximum(w3, K.zeros_like(w3)) * K.maximum(h3, K.zeros_like(h3))
 
     # area of union of both boxes
-    union = w4 * h4
+    union = w1 * h1 + w2 * h2 - intersection
 
     # iou calculation
     iou = intersection / union

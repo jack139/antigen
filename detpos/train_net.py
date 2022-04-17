@@ -84,7 +84,7 @@ model.summary()
 
 print(train_generator.class_indices)
 
-ckpt_filepath = "detpos_%s_b%d_e%d_%d.h5"%('vgg16',batch_size,epochs,train_steps_per_epoch)
+ckpt_filepath = "detpos_onebox_%s_b%d_e%d_%d.h5"%('vgg16',batch_size,epochs,train_steps_per_epoch)
 
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
     monitor='val_categorical_accuracy',verbose=1, save_best_only=True, 

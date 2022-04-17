@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 input_size = (256,256,3)
 
-json_path = '../data/json'
+json_path = '../data/onebox/json'
 
 output_path = './data/test'
 
@@ -28,7 +28,7 @@ if not os.path.exists(output_path):
 #model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
 
 model = get_model('vgg16', input_size=input_size, weights=None)
-model.load_weights("./locate_onebox_vgg16_b128_e30_141.h5")
+model.load_weights("../ckpt/locate_onebox_vgg16_b128_e30_141_0.90246.h5")
 
 
 def read_img(test_path,target_size = (224,224)):
@@ -120,7 +120,7 @@ def draw_box(test_path, p1):
 
     basename = os.path.basename(test_path)
     if '_' in basename:
-        label = basename.split('_')[1][:3]
+        label = basename.split('_')[2][:3] # 格式 prefix_num_label.jpg
     else:
         label = ''
     cv2.imwrite(f'{output_path}/{label}/{basename}', crop_img)
@@ -165,14 +165,11 @@ def IoU(y_true, y_pred):
     w3 = (w1 + w2 - dw1 - dw2) / 2
     h3 = (h1 + h2 - dh1 - dh2) / 2
 
-    w4 = w1 + w2 - w3
-    h4 = h1 + h2 - h3
-
     # intersection area
     intersection = max(w3, 0) * max(h3, 0)
 
     # area of union of both boxes
-    union = w4 * h4
+    union = w1 * h1 + w2 * h2 - intersection
     
     # iou calculation
     iou = intersection / union
