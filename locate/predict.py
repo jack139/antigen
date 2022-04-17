@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 input_size = (256,256,3)
 
-json_path = '../datagen/data/json2'
+json_path = '../data/twobox/json'
 
 output_path = './data/test'
 
@@ -28,7 +28,7 @@ if not os.path.exists(output_path):
 #model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
 
 model = get_model('vgg16', input_size=input_size, weights=None)
-model.load_weights("../ckpt/locate_vgg16_b128_e30_71_0.98256.h5")
+model.load_weights("../ckpt/locate_twobox_vgg16_b128_e30_141_0.88042.h5")
 
 
 def read_img(test_path,target_size = (224,224)):
@@ -128,7 +128,7 @@ def draw_box(test_path, p1, p2):
 
     basename = os.path.basename(test_path)
     if '_' in basename:
-        label = basename.split('_')[1][:3]
+        label = basename.split('_')[2][:3] # prefix_num_label.jpg
     else:
         label = ''
     cv2.imwrite(f'{output_path}/{label}/{basename}', crop_img)

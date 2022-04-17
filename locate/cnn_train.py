@@ -47,7 +47,7 @@ print(f"train data: {train_num}\tdev data: {val_num}")
 # train the network for bounding box regression
 print("[INFO] training bounding box regressor...")
 
-ckpt_filepath = "locate_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_steps_per_epoch)
+ckpt_filepath = "locate_twobox_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_steps_per_epoch)
 
 model_checkpoint = ModelCheckpoint(ckpt_filepath, 
     monitor='val_IoU',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
