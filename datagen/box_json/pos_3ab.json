@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          39.94117647058823,
+          220.52941176470588
+        ],
+        [
+          239.9411764705883,
+          468.7647058823529
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/pos_3ab.png",
+  "imageData": null,
+  "imageHeight": 769,
+  "imageWidth": 264
+}

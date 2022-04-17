@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          13.609756097560933,
+          208.7560975609756
+        ],
+        [
+          230.68292682926824,
+          479.48780487804873
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/fal_5.png",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 241
+}
