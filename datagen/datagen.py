@@ -232,16 +232,12 @@ if __name__ == "__main__":
         (2, 5000),
         (3, 5000),
         (4, 5000),
-        (5, 5000),
-        (6, 5000),
-        (7, 5000),
-        (8, 5000),
     ]
 
     import concurrent.futures
     import urllib.request
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(params)) as executor:
         future_to_gemerate = {executor.submit(generate_random_imgs, p[0], p[1]): p for p in params}
         for future in concurrent.futures.as_completed(future_to_gemerate):
             f = future_to_gemerate[future]

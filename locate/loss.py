@@ -8,7 +8,7 @@ def iou_loss(y_true, y_pred):
     # iou loss for bounding box prediction
     # input must be as [x1, y1, x2, y2]
 
-    penalty = 1
+    penalty = 0.
 
     # AOG = Area of Groundtruth box
     AoG = K.abs(K.transpose(y_true)[2] - K.transpose(y_true)[0] + penalty) \
@@ -25,7 +25,7 @@ def iou_loss(y_true, y_pred):
     overlap_3 = K.minimum(K.transpose(y_true)[3], K.transpose(y_pred)[3])
 
     # intersection area
-    intersection = (overlap_2 - overlap_0 + penalty) * (overlap_3 - overlap_1 + penalty)
+    intersection = K.abs(overlap_2 - overlap_0 + penalty) * K.abs(overlap_3 - overlap_1 + penalty)
 
     # area of union of both boxes
     union = AoG + AoP - intersection

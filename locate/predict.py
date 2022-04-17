@@ -28,7 +28,7 @@ if not os.path.exists(output_path):
 #model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
 
 model = get_model('vgg16', input_size=input_size, weights=None)
-model.load_weights("../ckpt/locate_onebox_vgg16_b128_e30_8_0.79683.h5")
+model.load_weights("./locate_onebox_vgg16_b128_e30_141.h5")
 
 
 def read_img(test_path,target_size = (224,224)):
@@ -163,7 +163,7 @@ def IoU(y_true, y_pred):
     overlap_3 = min(y_true[3], y_pred[3])
 
     # intersection area
-    intersection = (overlap_2 - overlap_0) * (overlap_3 - overlap_1)
+    intersection = abs(overlap_2 - overlap_0) * abs(overlap_3 - overlap_1)
 
     # area of union of both boxes
     union = AoG + AoP - intersection

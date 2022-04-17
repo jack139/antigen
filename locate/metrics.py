@@ -24,7 +24,7 @@ def iou_metric(y_true, y_pred):
     overlap_3 = K.minimum(K.transpose(y_true)[3], K.transpose(y_pred)[3])
 
     # intersection area
-    intersection = (overlap_2 - overlap_0) * (overlap_3 - overlap_1)
+    intersection = K.abs(overlap_2 - overlap_0) * K.abs(overlap_3 - overlap_1)
 
     # area of union of both boxes
     union = AoG + AoP - intersection
