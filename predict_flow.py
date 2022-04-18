@@ -153,6 +153,7 @@ if __name__ == '__main__':
     else:
         img = cv2.imread(sys.argv[1])
         crop_img = crop_box(img, p1)
+        cv2.imwrite(f'data/crop_{os.path.basename(sys.argv[1])}', crop_img)
         crop_img = cv2.resize(crop_img, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
         crop_img = np.reshape(crop_img,(1,)+crop_img.shape)
         detpos_pred = detpos_predict(crop_img)
