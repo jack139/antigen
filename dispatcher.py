@@ -18,6 +18,14 @@ import binascii
 
 logger = logger.get_logger(__name__)
 
+# 结果匹配
+result_map = {
+    'pos' : 'positive',
+    'neg' : 'negative',
+    'none' : 'not_found',
+    'fal' : 'invaild',
+    'nul' : 'invaild'
+}
 
 def process_api(request_id, request_msg):
     request = request_msg
@@ -25,6 +33,10 @@ def process_api(request_id, request_msg):
         if request['api']=='detpos_check': # 识别试剂盒
             r = api_func.detpos_check(request_id, request['image'])
             # 准备结果
+            if r in result_map.keys():
+                r = result_map[r]
+            else:
+                r = 'invaild'
             result = { 'code' : 200, 'data' : { 'msg':'success', 'result' : r, 'request_id' : request_id} }
 
         elif request['api']=='stress_test': # 压测

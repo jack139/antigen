@@ -69,12 +69,12 @@ def detpos_check(request_id, b64_data):
     inputs = np.reshape(inputs,(1,)+inputs.shape)
 
     # 定位预测
-    p1, p2, pred = predict_flow.locate_predict(inputs, h, w)
+    p1, pred = predict_flow.locate_predict(inputs, h, w)
     if pred.sum()<1e-2: # 没有试剂盒
         #print("Nothing found!")
         result = "none"
     else:
-        crop_img = predict_flow.crop_box(img, p1, p2)
+        crop_img = predict_flow.crop_box(img, p1)
         crop_img = cv2.resize(crop_img, predict_flow.detpos_input_size[:2], interpolation = cv2.INTER_AREA)
         crop_img = np.reshape(crop_img,(1,)+crop_img.shape)
         _, result = predict_flow.detpos_predict(crop_img)
