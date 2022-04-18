@@ -123,12 +123,12 @@ def draw_box(test_path, p1):
         label = basename.split('_')[2][:3] # 格式 prefix_num_label.jpg
     else:
         label = ''
-    cv2.imwrite(f'{output_path}/{label}/{basename}', crop_img)
+    cv2.imwrite(f'{output_path}/{label}/crop_{basename}', crop_img)
 
     # 画框
     cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
         True, color=(0, 255, 0), thickness=2)
-    cv2.imwrite(f'{output_path}/test_result.jpg', img)    
+    cv2.imwrite(f'{output_path}/test_{basename}', img)
 
 
 def predict(inputs, h, w): # h,w 为原始图片的 尺寸

@@ -34,10 +34,11 @@ def process_api(request_id, request_msg):
             r = api_func.detpos_check(request_id, request['image'])
             # 准备结果
             if r in result_map.keys():
-                r = result_map[r]
+                r2 = result_map[r]
             else:
-                r = 'invaild'
-            result = { 'code' : 200, 'data' : { 'msg':'success', 'result' : r, 'request_id' : request_id} }
+                r2 = 'invaild'
+            result = { 'code' : 200, 'data' : { 'msg':'success', 'result' : r2, 'comment' : r,
+                'request_id' : request_id} }
 
         elif request['api']=='stress_test': # 压测
             logger.error('stress_test delay: %.4f seconds'%request['delay']) 
