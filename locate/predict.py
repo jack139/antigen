@@ -190,6 +190,8 @@ if __name__ == '__main__':
     compu_iou = len(file_list)==1
 
     for ff in tqdm(file_list):
+        if os.path.isdir(ff):
+            continue
         inputs, h, w = read_img(ff, target_size=input_size[:2])
         p1, pred = predict(inputs, h, w)
         if pred.sum()<1e-2: # 没有试剂盒

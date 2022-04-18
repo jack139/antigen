@@ -35,3 +35,11 @@ python3 predict <datagen生成图片路径>
 cd detpos
 python3 train_net.py
 ```
+
+
+
+## 编译 sm3
+```
+cd api/utils/libsm3
+gcc -fPIC -shared -o libsm3.so sm3.c
+```

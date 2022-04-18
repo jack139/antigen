@@ -147,7 +147,7 @@ if __name__ == '__main__':
         sys.exit(2)
 
     inputs, h, w = read_img(sys.argv[1], target_size=locate_input_size[:2])
-    p2, pred = locate_predict(inputs, h, w)
+    p1, pred = locate_predict(inputs, h, w)
     if pred.sum()<1e-2: # 没有试剂盒
         print("Nothing found!")
     else:

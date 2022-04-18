@@ -22,11 +22,11 @@ def allowed_file(filename):
 
 
 # 接口演示
-@demo_app.route("/demo", methods=["GET"])
+@demo_app.route("/antigen/demo", methods=["GET"])
 def demo_get():
     return render_template('demo.html')
 
-@demo_app.route("/demo", methods=["POST"])
+@demo_app.route("/antigen/demo", methods=["POST"])
 def demo_post():
     file = request.files['file']
     cate = request.form['cate']
