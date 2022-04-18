@@ -6,12 +6,12 @@
       "label": "box",
       "points": [
         [
-          4.710280373831779,
-          221.42990654205607
+          47.40186915887847,
+          308.411214953271
         ],
         [
-          220.80487804878044,
-          485.5853658536585
+          251.14018691588785,
+          518.6915887850467
         ]
       ],
       "group_id": null,
@@ -19,8 +19,8 @@
       "flags": {}
     }
   ],
-  "imagePath": "../characters/pos_7.png",
+  "imagePath": "../characters/pos_a4a.png",
   "imageData": null,
-  "imageHeight": 800,
-  "imageWidth": 230
+  "imageHeight": 802,
+  "imageWidth": 279
 }
