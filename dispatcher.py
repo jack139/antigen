@@ -20,11 +20,11 @@ logger = logger.get_logger(__name__)
 
 # 结果匹配
 result_map = {
-    'pos' : 'positive',
-    'neg' : 'negative',
+    'pos'  : 'positive',
+    'neg'  : 'negative',
     'none' : 'not_found',
-    'fal' : 'invaild',
-    'nul' : 'invaild'
+    'fal'  : 'invalid',
+    'nul'  : 'invalid'
 }
 
 def process_api(request_id, request_msg):
