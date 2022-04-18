@@ -31,8 +31,11 @@ characters = [
     "fal3a",  "fal_5a",  "neg1",  "neg3",  "neg_7",  "nul_3a",  "nul4",  "pos2a",  "pos3",  "pos_7a",
     "fal_3",  "fal_5",  "neg_2a",  "neg_4a",  "none",  "nul3a",  "nul_6a",  "pos_2",  "pos_4a",  "pos_7b",
     "fal3",  "fal_7a",  "neg2a",  "neg4a",  "nul1a",  "nul_3",  "nul_6",  "pos2",  "pos4a",  "pos_7",
+    "fal_a5",  "neg_a3",  "neg_a5",  "pos_a1",  "pos_a3a",  "pos_a4",   "pos_a7a",
+    "neg_a1",  "neg_a4",  "neg_a6",  "pos_a2a",  "pos_a3",  "pos_a6a",  "pos_a7",
+    "neg_a2",  "neg_a5a",  "pos_a1a",  "pos_a2",  "pos_a4a",  "pos_a6",
 ]
-characters_p = [1/70]*70
+characters_p = [1/90]*90
 objects = ["none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D"]
 objects_p = [0.4, 0.1, 0.05, 0.1, 0.05, 0.1, 0.1, 0.1]
 angels = [0, 90, 180, 270]
@@ -122,9 +125,10 @@ def generate_image(background, character, object, file_name):
     background_file = path.join("backgrounds", f"{background}.png")
     background_image = Image.open(background_file)
 
-    # 背景随机缩放，1、2、3倍
-    background_ration = np.random.randint(1, 4)
-    (width, height) = (background_image.width // background_ration, background_image.height // background_ration)
+    # 背景随机收缩 2、3、4倍，长宽分开缩放，会出现细长条
+    background_x_ration = np.random.randint(2, 5)
+    background_y_ration = np.random.randint(2, 5)
+    (width, height) = (background_image.width // background_x_ration, background_image.height // background_y_ration)
     background_image = background_image.resize((width, height))
 
     #Create character
@@ -143,8 +147,8 @@ def generate_image(background, character, object, file_name):
     yy = background_image.height//2-character_image.height//2
 
     coordinates = (
-        xx + np.random.randint(-xx//2, xx//2),
-        yy + np.random.randint(-yy//2, yy//2)
+        xx + np.random.randint(-abs(xx)//2, abs(xx)//2), ## 可能为 负数
+        yy + np.random.randint(-abs(yy)//2, abs(yy)//2)
     ) #x, y
 
     background_image.paste(character_image, coordinates, mask=character_image)
@@ -225,13 +229,19 @@ def generate_random_imgs(prefix, total_imgs):
     return 'ok'
 
 if __name__ == "__main__":
+    #generate_random_imgs('test', 20)
+
 
     # 多线程生成图片
     params = [ # prefix, image_count
-        (1, 5000),
-        (2, 5000),
-        (3, 5000),
-        (4, 5000),
+        (1, 2500),
+        (2, 2500),
+        (3, 2500),
+        (4, 2500),
+        (5, 2500),
+        (6, 2500),
+        (7, 2500),
+        (8, 2500),
     ]
 
     import concurrent.futures
@@ -246,4 +256,4 @@ if __name__ == "__main__":
             except Exception as exc:
                 print('%r generated an exception: %s' % (f, exc))
             else:
-                print('%r returned: %s' % (f, len(data)))
+                print('%r returned: %s' % (f, data))
