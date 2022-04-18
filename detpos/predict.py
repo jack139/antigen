@@ -33,7 +33,7 @@ predictions = Dense(4, activation='softmax')(x)
 # this is the model we will train
 model = Model(inputs=base_model.input, outputs=predictions)
 
-model.load_weights("../ckpt/detpos_onebox_vgg16_b512_e10_18_0.99898.h5")
+model.load_weights("../ckpt/detpos_onebox_vgg16_b512_e07_0.99899.h5")
 
 def read_img(test_path,target_size = (224,224)):
     img = cv2.imread(test_path)

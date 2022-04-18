@@ -17,8 +17,8 @@ freeze = False # 是否冻结 CNN 模型
 input_size = (128,128,3) # 对 crop 数据 128就够了
 batch_size = 512
 learning_rate = 1e-4
-train_num = 8868
-dev_num = 994
+train_num = 10000
+dev_num = 2000
 train_steps_per_epoch = train_num // batch_size + 1 
 dev_steps_per_epoch = dev_num // batch_size + 1 
 epochs = 10
@@ -84,9 +84,8 @@ model.summary()
 
 print(train_generator.class_indices)
 
-ckpt_filepath = "detpos_onebox_%s_b%d_e%d_%d.h5"%('vgg16',batch_size,epochs,train_steps_per_epoch)
-
-model_checkpoint = ModelCheckpoint(ckpt_filepath, 
+model_checkpoint = ModelCheckpoint(
+    "detpos_onebox_%s_b%d_e{epoch:02d}_{val_categorical_accuracy:.5f}.h5"%('vgg16',batch_size), 
     monitor='val_categorical_accuracy',verbose=1, save_best_only=True, 
     save_weights_only=True, mode='max')
 

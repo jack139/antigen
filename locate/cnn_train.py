@@ -12,9 +12,9 @@ from loss import iou_loss
 from metrics import iou_metric
 
 train_dir = '../data/onebox/train'
-train_json = '../data/onebox/json'
+train_json = '../data/onebox/train_json'
 val_dir = '../data/onebox/dev'
-val_json = '../data/onebox/json'
+val_json = '../data/onebox/dev_json'
 
 
 model_type = 'vgg16'
@@ -47,10 +47,10 @@ print(f"train data: {train_num}\tdev data: {val_num}")
 # train the network for bounding box regression
 print("[INFO] training bounding box regressor...")
 
-ckpt_filepath = "locate_onebox_%s_b%d_e%d_%d.h5"%(model_type,batch_size,epochs,train_steps_per_epoch)
-
-model_checkpoint = ModelCheckpoint(ckpt_filepath, 
-    monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max')
+model_checkpoint = ModelCheckpoint(
+	"locate_onebox_%s_b%d_e{epoch:02d}_{val_iou_metric:.5f}.h5"%(model_type, batch_size), 
+    monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max'
+)
 
 #model.load_weights("./locate_onebox_vgg16_b128_e30_141.h5")
 
