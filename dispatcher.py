@@ -22,7 +22,7 @@ logger = logger.get_logger(__name__)
 result_map = {
     'pos'  : 'positive',
     'neg'  : 'negative',
-    'none' : 'not_found',
+    'none' : 'invalid', #'not_found',
     'fal'  : 'invalid',
     'nul'  : 'invalid'
 }
