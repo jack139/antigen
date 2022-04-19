@@ -17,12 +17,12 @@ if not path.exists(output_json_folder):
 
 # 出现概率
 backgrounds = [
-    "1", "2", "2a", "3", "3a", 
-    "4", "4a", "5", "6", "7", 
-    "8", "5a", "6a", "7a", "8a",
-    "1a", "9", "9a", "10", "10a",
+    "10a",  "1a",  "2a",  "3a",  "4a",  "5a",  "6a",
+    "7a",  "8a",  "9a",  "a3a",  "x10",  "x2a",  "x9aa",
+    "10",  "1",  "2",  "3",  "4",  "5",  "6",
+    "7",  "8",  "9",  "a3",  "x1",  "x2",  "x9a",
 ]
-backgrounds_p = [0.05]*20
+backgrounds_p = [1/28]*28
 characters = [
     "fal1a",  "fal_4a",  "fal_7",  "neg_2",  "neg_4",  "nul_2a",  "nul3",  "nul_7a",  "pos_3aa",  "pos_4",
     "fal1",  "fal4a",  "neg_1a",  "neg_3a",  "neg_5a",  "nul2a",  "nul_4a",  "nul_7",  "pos_3ab",  "pos4",
@@ -34,8 +34,10 @@ characters = [
     "fal_a5",  "neg_a3",  "neg_a5",  "pos_a1",  "pos_a3a",  "pos_a4",   "pos_a7a",
     "neg_a1",  "neg_a4",  "neg_a6",  "pos_a2a",  "pos_a3",  "pos_a6a",  "pos_a7",
     "neg_a2",  "neg_a5a",  "pos_a1a",  "pos_a2",  "pos_a4a",  "pos_a6",
+    "neg_c5a",  "pos_c1a",  "pos_c2a",  "pos_c3a",  "pos_c4a", "pos_c5a",
+    "neg_c5",  "pos_c1",  "pos_c2",  "pos_c3",  "pos_c4", "pos_c5",
 ]
-characters_p = [1/90]*90
+characters_p = [1/102]*102
 objects = ["none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D"]
 objects_p = [0.4, 0.1, 0.05, 0.1, 0.05, 0.1, 0.1, 0.1]
 angels = [0, 90, 180, 270]
