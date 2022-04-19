@@ -38,6 +38,14 @@ python3 train_net.py
 
 
 
+## 识别
+
+```
+python3 predict_flow.py <图片路径>
+```
+
+
+
 ## 编译 sm3
 ```
 cd api/utils/libsm3
