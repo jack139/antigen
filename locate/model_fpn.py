@@ -1,5 +1,5 @@
-import numpy as np
-#from keras.applications import ResNet50
+# coding=utf-8
+
 from keras.models import Model
 from keras.layers import *
 
@@ -38,19 +38,10 @@ def get_model(input_size = (224,224,3)):
 
     conv5 = Conv2D(32, (3, 3), activation='relu', padding='same')(conv5)
 
-    # h = Reshape([224 * 224, 3])(conv5)
-    # h=Permute([2,1])(h)
-    # h=Activation('softmax')(h)
-    # out=Reshape([224,224,3])(h)
-    #out = Conv2D(3, (1, 1), padding='same',activation='softmax')(conv5)
-
     bboxHead = Flatten()(conv5)
 
-    #bboxHead = Dense(1024, activation="relu")(bboxHead)
-    #bboxHead = Dense(256, activation="relu")(bboxHead)
-    bboxHead = Dense(64, activation="relu")(bboxHead)
-
-    bboxHead = Dense(4, activation="sigmoid")(bboxHead)
+    bboxHead = Dense(64, activation="relu", kernel_initializer='he_uniform')(bboxHead)
+    bboxHead = Dense(4, activation="sigmoid", kernel_initializer='he_normal')(bboxHead)
     model = Model(inputs=input, outputs=bboxHead)
 
     return model

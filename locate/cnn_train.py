@@ -8,7 +8,8 @@ from keras.optimizers import Adam, SGD, RMSprop
 from keras.callbacks import ModelCheckpoint
 from data import dataGenerator
 #from model import get_model
-from model_fpn import get_model
+#from model_fpn import get_model as get_model_fpn
+from model_resnet_fpn import get_model as get_model_resnet_fpn
 from loss import iou_loss
 from metrics import iou_metric
 
@@ -18,13 +19,18 @@ val_dir = '../data/onebox/dev'
 val_json = '../data/onebox/dev_json'
 
 
-model_type = 'vgg16'
+'''
+                vgg16   resnet-FPN
+batch_size      128     64
+learning_rate   1e-4    1e-5
+'''
+
+model_type = 'fpn'
 freeze = False # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
-#batch_size = 128 # vgg16
-batch_size = 64 # FPN
-epochs = 30
+batch_size = 64
 learning_rate = 1e-4
+epochs = 30
 train_num = len(os.listdir(train_dir)) # 训练集 数量
 val_num = len(os.listdir(val_dir))
 train_steps_per_epoch = train_num // batch_size + 1 
@@ -37,9 +43,9 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 
 
 # 生成模型
-#model = get_model(model_type, input_size=input_size, freeze=freeze)
+#model = get_model(model_type, input_size=input_size, freeze=freeze)  # vgg16
 #model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
-model = get_model(input_size=input_size) # FPN
+model = get_model_resnet_fpn(input_size=input_size)
 
 model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric])
 
@@ -51,7 +57,7 @@ print(f"train data: {train_num}\tdev data: {val_num}")
 print("[INFO] training bounding box regressor...")
 
 model_checkpoint = ModelCheckpoint(
-	"locate_onebox_%s_b%d_e{epoch:02d}_{val_iou_metric:.5f}.h5"%(model_type, batch_size), 
+    "locate_onebox_%s_b%d_e{epoch:02d}_{val_iou_metric:.5f}.h5"%(model_type, batch_size), 
     monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max'
 )
 

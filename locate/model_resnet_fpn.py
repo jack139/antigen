@@ -1,6 +1,5 @@
 # coding=utf-8
 
-import numpy as np
 from keras.applications import ResNet50
 from keras.models import Model
 from keras.layers import Conv2D, UpSampling2D, Flatten, Concatenate, Dense, Lambda, Input
@@ -50,9 +49,6 @@ def get_model(input_size = (224,224,3), weights='imagenet'):
                                      p6_output,
                                      p7_output])
 
-    #m1_output = Flatten()(m1_output)
-    #m1_output = Dense(1024, activation='relu', kernel_initializer='he_uniform')(m1_output)
-    #m1_output = Dense(256, activation='relu', kernel_initializer='he_uniform')(m1_output)
     m1_output = Dense(64, activation='relu', kernel_initializer='he_uniform')(m1_output)
     m1_output = Dense(4, activation='sigmoid', kernel_initializer='he_normal')(m1_output)
 

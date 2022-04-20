@@ -149,8 +149,8 @@ def generate_image(background, character, object, file_name):
     yy = background_image.height//2-character_image.height//2
 
     coordinates = (
-        xx + np.random.randint(-abs(xx)//2, abs(xx)//2), ## 可能为 负数
-        yy + np.random.randint(-abs(yy)//2, abs(yy)//2)
+        xx + np.random.randint(-abs(xx)//2, abs(xx)//2+1), ## 可能为 负数
+        yy + np.random.randint(-abs(yy)//2, abs(yy)//2+1)
     ) #x, y
 
     background_image.paste(character_image, coordinates, mask=character_image)
@@ -231,8 +231,7 @@ def generate_random_imgs(prefix, total_imgs):
     return 'ok'
 
 if __name__ == "__main__":
-    #generate_random_imgs('test', 20)
-
+    #generate_random_imgs('test', 200)
 
     # 多线程生成图片
     params = [ # prefix, image_count
