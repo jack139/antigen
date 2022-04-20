@@ -1,5 +1,7 @@
 # coding=utf-8
 
+# Panoptic FPN 1901.02446
+
 from keras.applications import MobileNetV2
 from keras.models import Model
 from keras.layers import *
