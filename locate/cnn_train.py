@@ -9,7 +9,8 @@ from keras.callbacks import ModelCheckpoint
 from data import dataGenerator
 #from model import get_model
 #from model_fpn import get_model as get_model_fpn
-from model_resnet_fpn import get_model as get_model_resnet_fpn
+#from model_resnet_fpn import get_model as get_model_fpn
+from model_mobile_fpn import get_model as get_model_fpn
 from loss import iou_loss
 from metrics import iou_metric
 
@@ -45,7 +46,7 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 # 生成模型
 #model = get_model(model_type, input_size=input_size, freeze=freeze)  # vgg16
 #model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
-model = get_model_resnet_fpn(input_size=input_size)
+model = get_model_fpn(input_size=input_size)
 
 model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric])
 
