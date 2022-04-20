@@ -1,61 +1,56 @@
-# coding=utf-8
-
 import numpy as np
-from keras.applications import ResNet50
+#from keras.applications import ResNet50
 from keras.models import Model
-from keras.layers import Conv2D, UpSampling2D, Flatten, Concatenate, Dense, Lambda, Input
-import tensorflow as tf
+from keras.layers import *
 
 
-def get_backbone_ResNet50(input_shape, weights):
-    """Builds ResNet50 with pre-trained imagenet weights"""
-    tf.reset_default_graph() # 防止 layer name 变化
-    backbone = ResNet50(include_top=False, input_shape=input_shape, weights=weights)
-    #print('\n'.join([l.name for l in backbone.layers]))
-    c3_output, c4_output, c5_output = [
-        backbone.get_layer(layer_name).output
-        for layer_name in ["activation_22", "activation_40", "activation_49"] # names in keras 2.3.1
-    ]
-    # ["conv3_block4_out", "conv4_block6_out", "conv5_block3_out"] # names in tf.keras
-    return backbone.input, [c3_output, c4_output, c5_output]
+def get_model(input_size = (224,224,3)):
+    input=Input(input_size)
+    conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(input)
+    conv1 =BatchNormalization()(conv1)
+    conv1 = Dropout(0.2)(conv1)
+    conv1 = Conv2D(64, (3, 3), activation='relu', padding='same')(conv1)
+    pool1 = MaxPool2D((2, 2))(conv1)
 
+    conv2 = Conv2D(128, (3, 3), activation='relu', padding='same')(pool1)
+    conv2=BatchNormalization()(conv2)
+    conv2 = Dropout(0.2)(conv2)
+    conv2 = Conv2D(128, (3, 3), activation='relu', padding='same')(conv2)
+    pool2 = MaxPool2D((2, 2))(conv2)
 
-def get_model(input_size = (224,224,3), weights='imagenet'):
-    base_inputs, base_outputs = get_backbone_ResNet50(input_shape=input_size, weights=weights)
-    c3_output, c4_output, c5_output = base_outputs
+    conv3 = Conv2D(256, (3, 3), activation='relu', padding='same')(pool2)
+    conv3=BatchNormalization()(conv3)
+    conv3 = Dropout(0.2)(conv3)
+    conv3 = Conv2D(256, (3, 3), activation='relu', padding='same')(conv3)
 
-    p3_output = Conv2D(256, (1, 1), activation='relu', padding="same")(c3_output)
-    p4_output = Conv2D(256, (1, 1), activation='relu', padding="same")(c4_output)
-    p5_output = Conv2D(256, (1, 1), activation='relu', padding="same")(c5_output)
+    up1 = concatenate([UpSampling2D((2, 2))(conv3), conv2], axis=-1)
+    conv4 = Conv2D(128, (3, 3), activation='relu', padding='same')(up1)
+    conv4=BatchNormalization()(conv4)
+    conv4 = Dropout(0.2)(conv4)
+    conv4 = Conv2D(128, (3, 3), activation='relu', padding='same')(conv4)
 
-    p4_output = Lambda(lambda x: x + UpSampling2D((2,2))(p5_output))(p4_output)
-    p3_output = Lambda(lambda x: x + UpSampling2D((2,2))(p4_output))(p3_output)
+    up2 = concatenate([UpSampling2D((2, 2))(conv4), conv1], axis=-1)
 
-    p3_output = Conv2D(256, (3, 3), activation='relu', padding="same")(p3_output)
-    p4_output = Conv2D(256, (3, 3), activation='relu', padding="same")(p4_output)
-    p5_output = Conv2D(256, (3, 3), activation='relu', padding="same")(p5_output)
+    conv5 = Conv2D(64, (3, 3), activation='relu', padding='same')(up2)
+    conv5=BatchNormalization()(conv5)
+    conv5 = Dropout(0.2)(conv5)
+    conv5 = Conv2D(64, (3, 3), activation='relu', padding='same')(conv5)
 
-    p6_output = Conv2D(256, (3, 3), activation='relu', padding="same")(c5_output)
-    p7_output = Conv2D(256, (3, 3), activation='relu', padding="same")(p6_output)
+    conv5 = Conv2D(32, (3, 3), activation='relu', padding='same')(conv5)
 
-    p3_output = Flatten()(p3_output)
-    p4_output = Flatten()(p4_output)
-    p5_output = Flatten()(p5_output)
-    p6_output = Flatten()(p6_output)
-    p7_output = Flatten()(p7_output)
+    # h = Reshape([224 * 224, 3])(conv5)
+    # h=Permute([2,1])(h)
+    # h=Activation('softmax')(h)
+    # out=Reshape([224,224,3])(h)
+    #out = Conv2D(3, (1, 1), padding='same',activation='softmax')(conv5)
 
-    m1_output = Concatenate(axis=1)([p3_output,
-                                     p4_output,
-                                     p5_output,
-                                     p6_output,
-                                     p7_output])
+    bboxHead = Flatten()(conv5)
 
-    #m1_output = Flatten()(m1_output)
-    #m1_output = Dense(1024, activation='relu', kernel_initializer='he_uniform')(m1_output)
-    #m1_output = Dense(256, activation='relu', kernel_initializer='he_uniform')(m1_output)
-    m1_output = Dense(64, activation='relu', kernel_initializer='he_uniform')(m1_output)
-    m1_output = Dense(4, activation='sigmoid', kernel_initializer='he_normal')(m1_output)
+    #bboxHead = Dense(1024, activation="relu")(bboxHead)
+    #bboxHead = Dense(256, activation="relu")(bboxHead)
+    bboxHead = Dense(64, activation="relu")(bboxHead)
 
-    model = Model(inputs=base_inputs, outputs=m1_output)
+    bboxHead = Dense(4, activation="sigmoid")(bboxHead)
+    model = Model(inputs=input, outputs=bboxHead)
 
     return model
