@@ -21,16 +21,16 @@ val_json = '../data/onebox/dev_json'
 
 
 '''
-                vgg16   resnet-FPN
-batch_size      128     64
-learning_rate   1e-4    1e-5
+                vgg16   resnet-FPN  mobile-FPN
+batch_size      128     64          256
+learning_rate   1e-4    1e-5        1e-4
 '''
 
-model_type = 'fpn'
+model_type = 'mobile-fpn'
 freeze = False # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
-batch_size = 64
-learning_rate = 1e-4
+batch_size = 256
+learning_rate = 1e-5
 epochs = 30
 train_num = len(os.listdir(train_dir)) # 训练集 数量
 val_num = len(os.listdir(val_dir))
@@ -45,8 +45,7 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 
 # 生成模型
 #model = get_model(model_type, input_size=input_size, freeze=freeze)  # vgg16
-#model = get_model(model_type, input_size=input_size, freeze=True, weights=None) # for test
-model = get_model_fpn(input_size=input_size)
+model = get_model_fpn(input_size=input_size) # fpn
 
 model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric])
 
