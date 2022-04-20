@@ -7,7 +7,7 @@ import numpy as np
 from keras.optimizers import Adam, SGD, RMSprop
 from keras.callbacks import ModelCheckpoint
 from data import dataGenerator
-#from model import get_model
+#from model_cnn import get_model
 #from model_resnet_fpn import get_model as get_model_fpn
 #from model_mobile_fpn import get_model as get_model_fpn
 from model_mobile_pafpn import get_model as get_model_fpn

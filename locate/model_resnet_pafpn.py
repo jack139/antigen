@@ -1,6 +1,6 @@
 # coding=utf-8
 
-# PAFPN 1803.01534
+# PAFPN 1803.01534 + Resnet50 v2
 
 from keras.applications import ResNet50V2
 from keras.models import Model

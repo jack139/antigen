@@ -6,6 +6,7 @@ from keras.applications import MobileNetV2
 from keras.models import Model
 from keras.layers import *
 
+# Panoptic FPN 1901.02446 + MobileNet v2
 
 def get_backbone_MobileNet(input_shape, weights):
     """Builds MobileNetV2 with pre-trained imagenet weights"""

@@ -1,5 +1,7 @@
 # coding=utf-8
 
+# Panoptic FPN 1901.02446 + Resnet50 v2
+
 from keras.applications import ResNet50V2
 from keras.models import Model
 from keras.layers import *
