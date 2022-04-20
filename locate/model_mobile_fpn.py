@@ -31,8 +31,8 @@ def get_model(input_size = (256,256,3), weights='imagenet'):
     p4_output = Conv2D(256, 1, strides=1, activation='relu', padding="same")(c4_output)
     p5_output = Conv2D(256, 1, strides=1, activation='relu', padding="same")(c5_output)
 
-    p4_output = Lambda(lambda x: x + p5_output)(p4_output)
-    p3_output = Lambda(lambda x: x + p4_output)(p3_output)
+    p4_output = Add()([p5_output, p4_output])
+    p3_output = Add()([p4_output, p3_output])
 
     p3_output = Conv2D(256, 3, strides=1, activation='relu', padding="same")(p3_output)
     p4_output = Conv2D(256, 3, strides=1, activation='relu', padding="same")(p4_output)

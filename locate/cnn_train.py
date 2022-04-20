@@ -9,8 +9,8 @@ from keras.callbacks import ModelCheckpoint
 from data import dataGenerator
 #from model_cnn import get_model
 #from model_resnet_fpn import get_model as get_model_fpn
-#from model_mobile_fpn import get_model as get_model_fpn
-from model_mobile_pafpn import get_model as get_model_fpn
+from model_mobile_fpn import get_model as get_model_fpn
+from model_resnet_pafpn import get_model as get_model_fpn
 from loss import iou_loss
 from metrics import iou_metric
 
@@ -22,14 +22,14 @@ val_json = '../data/onebox/dev_json'
 
 '''
                 vgg16   resnet-FPN  resnet-PAFPN    mobile-FPN
-batch_size      128     64          64              256
+batch_size      128     128          64              128
 learning_rate   1e-4    1e-5        1e-5            1e-5
 '''
 
-model_type = 'pafpn'
+model_type = 'resnet-fpn'
 freeze = False # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
-batch_size = 256
+batch_size = 128
 learning_rate = 1e-5
 epochs = 30
 train_num = len(os.listdir(train_dir)) # 训练集 数量
