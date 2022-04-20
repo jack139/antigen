@@ -6,7 +6,7 @@ from keras.layers import *
 
 
 def get_backbone_MobileNet(input_shape, weights):
-    """Builds ResNet50 with pre-trained imagenet weights"""
+    """Builds MobileNetV2 with pre-trained imagenet weights"""
     backbone = MobileNetV2(include_top=False, input_shape=input_shape, weights=weights)
     c3_output, c4_output, c5_output = [
         backbone.get_layer(layer_name).output
