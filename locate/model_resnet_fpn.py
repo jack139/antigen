@@ -32,25 +32,17 @@ def get_model(input_size = (256,256,3), weights='imagenet'):
     p4_output = Conv2D(256, 3, strides=1, activation='relu', padding="same")(p4_output)
     p5_output = Conv2D(256, 3, strides=1, activation='relu', padding="same")(p5_output)
 
-    p6_output = Conv2D(256, 3, strides=2, activation='relu', padding="same")(c5_output)
-    p7_output = Conv2D(256, 3, strides=2, activation='relu', padding="same")(p6_output)
-
     p3_output = Flatten()(p3_output)
     p4_output = Flatten()(p4_output)
     p5_output = Flatten()(p5_output)
-    p6_output = Flatten()(p6_output)
-    p7_output = Flatten()(p7_output)
 
     m1_output = Concatenate(axis=1)([p3_output,
                                      p4_output,
-                                     p5_output,
-                                     p6_output,
-                                     p7_output])
+                                     p5_output])
 
-    #m1_output = Flatten()(m1_output)
-
-    m1_output = Dense(64, activation='relu', kernel_initializer='he_uniform')(m1_output)
-    m1_output = Dense(4, activation='sigmoid', kernel_initializer='he_normal')(m1_output)
+    m1_output = Dense(256, activation='relu')(m1_output)
+    m1_output = Dense(64, activation='relu')(m1_output)
+    m1_output = Dense(4, activation='sigmoid')(m1_output)
 
     model = Model(inputs=base_inputs, outputs=m1_output)
 

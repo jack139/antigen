@@ -8,8 +8,8 @@ from keras.optimizers import Adam, SGD, RMSprop
 from keras.callbacks import ModelCheckpoint
 from data import dataGenerator
 #from model_cnn import get_model
-#from model_resnet_fpn import get_model as get_model_fpn
-from model_mobile_fpn import get_model as get_model_fpn
+from model_resnet_fpn import get_model as get_model_fpn
+#from model_mobile_fpn import get_model as get_model_fpn
 #from model_resnet_pafpn import get_model as get_model_fpn
 from loss import iou_loss
 from metrics import iou_metric
@@ -26,7 +26,7 @@ batch_size      128     128          64              128
 learning_rate   1e-4    1e-5        1e-5            1e-5
 '''
 
-model_type = 'mobile-fpn'
+model_type = 'resnet-fpn'
 freeze = False # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
 batch_size = 128
