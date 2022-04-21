@@ -6,7 +6,7 @@ os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 import json
 import numpy as np 
 import cv2
-from locate.model import get_model
+from locate.model_cnn import get_model
 from datetime import datetime
 from tqdm import tqdm
 
@@ -103,8 +103,13 @@ def crop_box(img, p1):
             rotate_angle = 180
             x1, y1, x2, y2 = box1[2], box1[3], box1[0], box1[1]
 
+    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+
+    if x1==x2 or y1==y2: # 没有结果
+        return None
+
     # 截图 box
-    crop_img = img[int(y1):int(y2), int(x1):int(x2)].copy()
+    crop_img = img[y1:y2, x1:x2].copy()
 
     #print(rotate_angle)
 
@@ -148,11 +153,11 @@ if __name__ == '__main__':
 
     inputs, h, w = read_img(sys.argv[1], target_size=locate_input_size[:2])
     p1, pred = locate_predict(inputs, h, w)
-    if pred.sum()<1e-2: # 没有试剂盒
+    img = cv2.imread(sys.argv[1])
+    crop_img = crop_box(img, p1)
+    if crop_img is None:  # 没找到试剂盒
         print("Nothing found!")
     else:
-        img = cv2.imread(sys.argv[1])
-        crop_img = crop_box(img, p1)
         cv2.imwrite(f'data/crop_{os.path.basename(sys.argv[1])}', crop_img)
         crop_img = cv2.resize(crop_img, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
         crop_img = np.reshape(crop_img,(1,)+crop_img.shape)

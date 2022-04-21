@@ -16,7 +16,7 @@ def start_processor(pname, param=''):
     cmd_path = '%s/%s.pyc'%(APP_DIR, pname)
     if not os.path.exists(cmd_path):
         cmd_path = '%s/%s.py'%(APP_DIR, pname)
-    cmd0="nohup python3 %s %s >> %s/%s.log 2>&1 &" % \
+    cmd0="nohup python3 %s %s >> %s/antigen_%s.log 2>&1 &" % \
         (cmd_path, param, LOG_DIR, pname+param.replace(' ',''))
     print('start process: ', cmd0)
     os.system(cmd0)

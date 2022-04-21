@@ -6,7 +6,7 @@ os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 import json
 import numpy as np 
 import cv2
-from model import get_model
+from model_cnn import get_model
 from datetime import datetime
 from tqdm import tqdm
 
@@ -110,8 +110,13 @@ def draw_box(test_path, p1):
             rotate_angle = 180
             x1, y1, x2, y2 = box1[2], box1[3], box1[0], box1[1]
 
+    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+
+    if x1==x2 or y1==y2:
+        return False
+
     # 截图 box
-    crop_img = img[int(y1):int(y2), int(x1):int(x2)].copy()
+    crop_img = img[y1:y2, x1:x2].copy()
 
     #print(rotate_angle)
 
@@ -129,6 +134,8 @@ def draw_box(test_path, p1):
     cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
         True, color=(0, 255, 0), thickness=2)
     cv2.imwrite(f'{output_path}/test_{basename}', img)
+
+    return True
 
 
 def predict(inputs, h, w): # h,w 为原始图片的 尺寸
@@ -194,10 +201,8 @@ if __name__ == '__main__':
             continue
         inputs, h, w = read_img(ff, target_size=input_size[:2])
         p1, pred = predict(inputs, h, w)
-        if pred.sum()<1e-2: # 没有试剂盒
+        if not draw_box(ff, p1): # 没有试剂盒
             print("Nothing found!")
-        else:
-            draw_box(ff, p1)
 
         if compu_iou:
             # 计算IoU
