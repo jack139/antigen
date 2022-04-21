@@ -5,7 +5,7 @@ os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 import numpy as np
 from keras.preprocessing.image import ImageDataGenerator
-from keras.applications import ResNet50, MobileNetV2, VGG16
+from keras.applications import ResNet50V2, MobileNetV2, VGG16
 from keras.preprocessing import image
 from keras.models import Model
 from keras.optimizers import Adam
@@ -56,7 +56,7 @@ test_generator = test_datagen.flow_from_directory(
 # create the base pre-trained model
 base_model = VGG16(weights='imagenet', input_shape=input_size, include_top=False)
 #base_model = MobileNetV2(weights='imagenet', input_shape=input_size, include_top=False)
-#base_model = ResNet50(weights='imagenet', input_shape=input_size, include_top=False)
+#base_model = ResNet50V2(weights='imagenet', input_shape=input_size, include_top=False)
 
 
 # add a global spatial average pooling layer
