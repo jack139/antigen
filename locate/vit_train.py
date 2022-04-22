@@ -1,35 +1,22 @@
-# coding=utf-8
-
 import os
 os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 import numpy as np
 from keras.optimizers import Adam, SGD, RMSprop
 from keras.callbacks import ModelCheckpoint
+from model_vit import VisionTransformer
 from data import dataGenerator
-#from model_cnn import get_model
-from model_resnet_fpn import get_model as get_model_fpn
-#from model_mobile_fpn import get_model as get_model_fpn
-#from model_resnet_pafpn import get_model as get_model_fpn
 from loss import iou_loss
 from metrics import iou_metric
 
+
 train_dir = '../data/onebox/train'
-train_json = '../data/onebox/train_json'
+train_json = '../data/onebox/json'
 val_dir = '../data/onebox/dev'
-val_json = '../data/onebox/dev_json'
+val_json = '../data/onebox/json'
 
-
-'''
-                vgg16   resnet-FPN  resnet-PAFPN    mobile-FPN
-batch_size      128     128          64              128
-learning_rate   1e-4    1e-5        1e-5            1e-5
-'''
-
-model_type = 'resnet-fpn'
-freeze = False # 是否冻结 CNN 模型
 input_size = (256,256,3)  # 模型输入图片尺寸
-batch_size = 128
+batch_size = 2
 learning_rate = 1e-5
 epochs = 30
 train_num = len(os.listdir(train_dir)) # 训练集 数量
@@ -42,14 +29,19 @@ val_steps_per_epoch = val_num // batch_size + 1
 train_generator = dataGenerator(train_dir, train_json, batch_size=batch_size, target_size=input_size[:2])
 val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_size=input_size[:2])
 
-
-# 生成模型
-#model = get_model(model_type, input_size=input_size, freeze=freeze)  # vgg16
-model = get_model_fpn(input_size=input_size) # fpn
-
+# ViT 模型
+model = VisionTransformer(
+    image_size=input_size[0],
+    patch_size=4,
+    num_layers=8,
+    num_classes=4,
+    d_model=64,
+    num_heads=4,
+    mlp_dim=128,
+    channels=3,
+    dropout=0.1,
+)
 model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric])
-
-print(model.summary())
 
 print(f"train data: {train_num}\tdev data: {val_num}")
 
@@ -57,9 +49,16 @@ print(f"train data: {train_num}\tdev data: {val_num}")
 print("[INFO] training bounding box regressor...")
 
 model_checkpoint = ModelCheckpoint(
-    "locate_onebox_%s_b%d_e{epoch:02d}_{val_iou_metric:.5f}.h5"%(model_type, batch_size), 
+    "locate_onebox_ViT_b%d_e{epoch:02d}_{val_iou_metric:.5f}.h5"%(batch_size), 
     monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max'
 )
+#reduce_lr = ReduceLROnPlateau(
+#    monitor='loss', factor=0.1, patience=3, verbose=0, mode='auto',
+#    min_delta=0.0001, cooldown=0, min_lr=0)    
+
+# 训练一次，进行编译，否则 fit_generator 会报模型编译错误
+x, y = next(train_generator)
+model.fit(np.array([x[0]]), np.array([y[0]]), epochs=1)
 
 #model.load_weights("./locate_onebox_resnet-fpn_b128_e15_0.84804.h5")
 
