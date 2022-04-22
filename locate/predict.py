@@ -6,7 +6,8 @@ os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 import json
 import numpy as np 
 import cv2
-from model_cnn import get_model
+#from model_cnn import get_model
+from model_resnet_fpn import get_model as get_model_fpn
 from datetime import datetime
 from tqdm import tqdm
 
@@ -22,13 +23,11 @@ if not os.path.exists(output_path):
     os.mkdir(f"{output_path}/fal")
     os.mkdir(f"{output_path}/neg")
     os.mkdir(f"{output_path}/pos")
-    os.mkdir(f"{output_path}/non")
 
-#model = get_model('mobile', input_size=input_size, weights=None)
-#model.load_weights("./locate_mobile_b128_e30_71_0.98154.h5")
-
-model = get_model('vgg16', input_size=input_size, weights=None)
-model.load_weights("../ckpt/locate_onebox_vgg16_b128_e30_157_0.90929.h5")
+#model = get_model('vgg16', input_size=input_size, weights=None)
+#model.load_weights("../ckpt/locate_onebox_vgg16_b128_e30_157_0.90929.h5")
+model = get_model_fpn(input_size=input_size, weights=None) # fpn
+model.load_weights("../ckpt/locate_onebox_resnet-fpn_b128_e22_0.86654.h5")
 
 
 def read_img(test_path,target_size = (224,224)):
@@ -88,7 +87,7 @@ def rotate_bound(image,angle):
     
     return cv2.warpAffine(image,M,(nW,nH))
 
-def draw_box(test_path, p1):
+def draw_box(test_path, p1, iou=None, do_draw_box=True):
     img = cv2.imread(test_path)
 
     # 计算需选择角度
@@ -128,12 +127,13 @@ def draw_box(test_path, p1):
         label = basename.split('_')[2][:3] # 格式 prefix_num_label.jpg
     else:
         label = ''
-    cv2.imwrite(f'{output_path}/{label}/crop_{basename}', crop_img)
+    cv2.imwrite(f'{output_path}/{label}/crop_{iou:.4f}_{basename}', crop_img)
 
-    # 画框
-    cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
-        True, color=(0, 255, 0), thickness=2)
-    cv2.imwrite(f'{output_path}/test_{basename}', img)
+    if do_draw_box:
+        # 画框
+        cv2.polylines(img, [np.array([ [p1[0], p1[1]], [p1[2], p1[1]], [p1[2], p1[3]], [p1[0], p1[3]] ], np.int32)], 
+            True, color=(0, 255, 0), thickness=2)
+        cv2.imwrite(f'{output_path}/test_{basename}', img)
 
     return True
 
@@ -189,25 +189,28 @@ if __name__ == '__main__':
         print("usage: python %s <img_path>"%sys.argv[0])
         sys.exit(2)
 
+    do_draw_box = True
+
     if os.path.isdir(sys.argv[1]):
         file_list = glob.glob(sys.argv[1]+'/*')
     else:
         file_list = [sys.argv[1]]
-
-    compu_iou = len(file_list)==1
 
     for ff in tqdm(file_list):
         if os.path.isdir(ff):
             continue
         inputs, h, w = read_img(ff, target_size=input_size[:2])
         p1, pred = predict(inputs, h, w)
-        if not draw_box(ff, p1): # 没有试剂盒
-            print("Nothing found!")
 
-        if compu_iou:
-            # 计算IoU
-            truth = read_json(ff)
-            if truth is not None:
-                print(truth)
-                print(pred)
-                print(ff, 'IoU = ', IoU(truth, pred[0]))
+        iou = 100.
+
+        # 计算IoU
+        truth = read_json(ff)
+        if truth is not None:
+            #print(truth)
+            #print(pred)
+            iou = IoU(truth, pred[0])
+            #print(ff, 'IoU = ', iou)
+
+        if not draw_box(ff, p1, iou, do_draw_box=do_draw_box): # 没有试剂盒
+            print("Nothing found!", ff)
