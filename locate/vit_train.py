@@ -16,7 +16,7 @@ val_dir = '../data/onebox/dev'
 val_json = '../data/onebox/json'
 
 input_size = (256,256,3)  # 模型输入图片尺寸
-batch_size = 2
+batch_size = 4
 learning_rate = 1e-5
 epochs = 30
 train_num = len(os.listdir(train_dir)) # 训练集 数量
