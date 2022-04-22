@@ -6,7 +6,8 @@ os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 import json
 import numpy as np 
 import cv2
-from locate.model_cnn import get_model
+#from locate.model_cnn import get_model
+from locate.model_resnet_fpn import get_model as get_model_fpn
 from datetime import datetime
 from tqdm import tqdm
 
@@ -37,7 +38,8 @@ id2label = {0 : 'fal', 1: 'neg', 2 : 'nul', 3 : 'pos'}
 with graph.as_default():
     with session.as_default():
         # 定位模型
-        locate_model = get_model('vgg16', input_size=locate_input_size, weights=None)
+        #locate_model = get_model('vgg16', input_size=locate_input_size, weights=None)
+        locate_model = get_model_fpn(input_size=locate_input_size, weights=None) # fpn
         locate_model.load_weights(LOCATE_WEIGHTS)
         print('Lcate model load_weights: ', LOCATE_WEIGHTS)
 
@@ -105,7 +107,7 @@ def crop_box(img, p1):
 
     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-    if x1==x2 or y1==y2: # 没有结果
+    if abs(x1-x2)<5 or abs(y1-y2)<5: # 没有结果
         return None
 
     # 截图 box

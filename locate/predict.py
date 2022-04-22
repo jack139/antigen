@@ -23,6 +23,7 @@ if not os.path.exists(output_path):
     os.mkdir(f"{output_path}/fal")
     os.mkdir(f"{output_path}/neg")
     os.mkdir(f"{output_path}/pos")
+    os.mkdir(f"{output_path}/non")
 
 #model = get_model('vgg16', input_size=input_size, weights=None)
 #model.load_weights("../ckpt/locate_onebox_vgg16_b128_e30_157_0.90929.h5")
@@ -111,7 +112,7 @@ def draw_box(test_path, p1, iou=None, do_draw_box=True):
 
     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-    if x1==x2 or y1==y2:
+    if abs(x1-x2)<5 or abs(y1-y2)<5:
         return False
 
     # 截图 box
