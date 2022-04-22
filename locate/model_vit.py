@@ -180,7 +180,7 @@ class VisionTransformer(keras.Model):
 
     def call(self, x, training):
         batch_size = tf.shape(x)[0]
-        x = self.rescale(x)
+        #x = self.rescale(x)  # data.py 处理时已除 255
         patches = self.extract_patches(x)
         x = self.patch_proj(patches)
 

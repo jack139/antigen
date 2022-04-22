@@ -16,7 +16,7 @@ val_dir = '../data/onebox/dev'
 val_json = '../data/onebox/json'
 
 input_size = (256,256,3)  # 模型输入图片尺寸
-batch_size = 4
+batch_size = 128
 learning_rate = 1e-5
 epochs = 30
 train_num = len(os.listdir(train_dir)) # 训练集 数量
@@ -32,7 +32,7 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 # ViT 模型
 model = VisionTransformer(
     image_size=input_size[0],
-    patch_size=4,
+    patch_size=32,
     num_layers=8,
     num_classes=4,
     d_model=64,
