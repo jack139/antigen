@@ -12,10 +12,9 @@ from datetime import datetime
 from tqdm import tqdm
 
 input_size = (256,256,3)
-
-json_path = '../data/onebox/json'
-
+json_path = '../data/crop/train_json'
 output_path = './data/test'
+
 
 if not os.path.exists(output_path):
     os.mkdir(output_path)
@@ -112,7 +111,7 @@ def draw_box(test_path, p1, iou=None, do_draw_box=True):
 
     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-    if abs(x1-x2)<5 or abs(y1-y2)<5:
+    if abs(x1-x2)<12 or abs(y1-y2)<12:
         return False
 
     # 截图 box
@@ -187,10 +186,13 @@ def IoU(y_true, y_pred):
 
 if __name__ == '__main__':
     if len(sys.argv)<2:
-        print("usage: python %s <img_path>"%sys.argv[0])
+        print("usage: python %s <img_path> [draw_box(0 or 1)]"%sys.argv[0])
         sys.exit(2)
 
-    do_draw_box = True
+    if len(sys.argv)>2:
+        do_draw_box = sys.argv[2]=='1'
+    else:
+        do_draw_box = True
 
     if os.path.isdir(sys.argv[1]):
         file_list = glob.glob(sys.argv[1]+'/*')

@@ -47,7 +47,7 @@ with graph.as_default():
         base_model = VGG16(weights=None, input_shape=detpos_input_size, include_top=False)
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
-        x = Dense(512, activation='relu')(x)
+        #x = Dense(512, activation='relu')(x)
         predictions = Dense(4, activation='softmax')(x)
         detpos_model = Model(inputs=base_model.input, outputs=predictions)
         detpos_model.load_weights(DETPOS_WEIGHTS)
@@ -107,7 +107,7 @@ def crop_box(img, p1):
 
     x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
 
-    if abs(x1-x2)<5 or abs(y1-y2)<5: # 没有结果
+    if abs(x1-x2)<12 or abs(y1-y2)<12: # 没有结果
         return None
 
     # 截图 box

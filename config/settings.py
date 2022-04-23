@@ -3,7 +3,7 @@
 ############# 算法相关设置
 
 # detpos 预训练权重的路径
-DETPOS_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/detpos_onebox_vgg16_b512_e07_0.99899.h5'
+DETPOS_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/detpos_onebox_vgg16_b512_e07_0.99898.h5'
 
 # locate 预训练权重的路径
 LOCATE_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/locate_onebox_resnet-fpn_b128_e22_0.86654.h5'

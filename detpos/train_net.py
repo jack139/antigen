@@ -55,7 +55,6 @@ test_generator = test_datagen.flow_from_directory(
 
 # create the base pre-trained model
 base_model = VGG16(weights='imagenet', input_shape=input_size, include_top=False)
-#base_model = MobileNetV2(weights='imagenet', input_shape=input_size, include_top=False)
 #base_model = ResNet50V2(weights='imagenet', input_shape=input_size, include_top=False)
 
 
@@ -63,7 +62,7 @@ base_model = VGG16(weights='imagenet', input_shape=input_size, include_top=False
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 # fully-connected layer
-x = Dense(512, activation='relu')(x)
+#x = Dense(512, activation='relu')(x)
 #x = Dropout(0.2)(x)
 #x = Dense(32, activation='relu')(x)
 predictions = Dense(4, activation='softmax')(x)

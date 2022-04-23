@@ -24,7 +24,7 @@ base_model = VGG16(weights=None, input_shape=input_size, include_top=False)
 x = base_model.output
 x = GlobalAveragePooling2D()(x)
 # let's add a fully-connected layer
-x = Dense(512, activation='relu')(x)
+#x = Dense(512, activation='relu')(x)
 #x = Dropout(0.2)(x)
 #x = Dense(32, activation='relu')(x)
 # and a logistic layer 
@@ -33,7 +33,7 @@ predictions = Dense(4, activation='softmax')(x)
 # this is the model we will train
 model = Model(inputs=base_model.input, outputs=predictions)
 
-model.load_weights("../ckpt/detpos_onebox_vgg16_b512_e07_0.99899.h5")
+model.load_weights("../ckpt/detpos_onebox_vgg16_b512_e07_0.99898.h5")
 
 def read_img(test_path,target_size = (224,224)):
     img = cv2.imread(test_path)
