@@ -5,7 +5,7 @@ def iou_loss(y_true, y_pred):
     # iou loss for bounding box prediction
     # input must be as [x1, y1, x2, y2]
 
-    penalty = 1 # 初始为 1, loss 减小后， 可设置为 0 
+    penalty = 0.5 # 初始为 1, loss 减小后， 可设置为 0 
 
     #y_true = y_true * 256
     #y_pred = y_pred * 256
