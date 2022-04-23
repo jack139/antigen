@@ -16,7 +16,7 @@ val_json = '../data/onebox/dev_json'
 
 input_size = (256,256)  # 模型输入图片尺寸
 batch_size = 32
-learning_rate = 8e-4
+learning_rate = 5e-6
 epochs = 30
 train_num = len(os.listdir(train_dir)) # 训练集 数量
 val_num = len(os.listdir(val_dir))
@@ -63,28 +63,17 @@ print(f"train data: {train_num}\tdev data: {val_num}")
 # train the network for bounding box regression
 print("[INFO] training bounding box regressor...")
 
-class LRSchedulerPerStep(Callback):
-    def __init__(self, d_model, warmup=4000):
-        self.basic = d_model**-0.5
-        self.warm = warmup**-1.5
-        self.step_num = 0
-    def on_batch_begin(self, batch, logs = None):
-        self.step_num += 1
-        lr = self.basic * min(self.step_num**-0.5, self.step_num*self.warm)
-        K.set_value(self.model.optimizer.lr, lr)
-    def on_epoch_begin(self, epoch, logs = None):
-        print('lr=', K.get_value(self.model.optimizer.lr))
-lr_scheduler = LRSchedulerPerStep(d_model, 4000) 
-
 model_checkpoint = ModelCheckpoint(
     "locate_onebox_ViT_b%d_e{epoch:02d}_{val_iou_metric:.5f}.h5"%(batch_size), 
     monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max'
 )
+
+vit.model.load_weights("locate_onebox_ViT_b32_e02_0.02981.h5")
 
 vit.model.fit_generator(train_generator,
     steps_per_epoch=train_steps_per_epoch,
     epochs=epochs,
     validation_data=val_generator,
     validation_steps=val_steps_per_epoch,
-    callbacks=[model_checkpoint, lr_scheduler]
+    callbacks=[model_checkpoint]
 )
