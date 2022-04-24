@@ -47,7 +47,7 @@ val_generator = dataGenerator(val_dir, val_json, batch_size=batch_size, target_s
 #model = get_model(model_type, input_size=input_size, freeze=freeze)  # vgg16
 model = get_model_fpn(input_size=input_size) # fpn
 
-model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric])
+model.compile(loss=iou_loss, optimizer=Adam(lr=learning_rate), metrics=[iou_metric, "mse"])
 
 print(model.summary())
 

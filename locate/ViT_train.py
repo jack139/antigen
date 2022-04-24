@@ -7,6 +7,7 @@ from keras.callbacks import ModelCheckpoint, Callback
 from model_ViT import VisionTransformer
 from data import dataGenerator
 from loss import iou_loss
+from metrics import iou_metric
 
 
 train_dir = '../data/onebox/train'
@@ -55,7 +56,11 @@ vit = VisionTransformer(
     patch_size=patch_size
 )
 
-vit.compile(Adam(learning_rate, 0.9, 0.98, epsilon=1e-9), loss=iou_loss)
+vit.compile(
+    optimizer=Adam(learning_rate, 0.9, 0.98, epsilon=1e-9), 
+    loss=iou_loss,
+    metrics=[iou_metric, "mse"]
+)
 
 vit.model.summary()
 

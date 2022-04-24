@@ -1,11 +1,14 @@
 # coding=utf-8
 from keras import backend as K
+from keras.losses import MeanSquaredError
+
+mse = MeanSquaredError()
 
 def iou_loss(y_true, y_pred):
     # iou loss for bounding box prediction
     # input must be as [x1, y1, x2, y2]
 
-    penalty = 0.1 # 初始为 1, loss 减小后， 可设置为 0 
+    penalty = 0. # 初始可为 1, loss 减小后， 可设置为 0 （使用mse做L2后可不使用）
 
     #y_true = y_true * 256
     #y_pred = y_pred * 256
@@ -45,6 +48,7 @@ def iou_loss(y_true, y_pred):
     iou = K.clip(iou, 0.0 + K.epsilon(), 1.0 - K.epsilon())
 
     # loss for the iou value
-    iou_loss = -K.log(iou)
+    #iou_loss = -K.log(iou)
+    iou_loss = 1 - iou
 
-    return iou_loss
+    return iou_loss + mse(y_true, y_pred) # mse 做 L2
