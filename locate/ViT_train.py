@@ -6,6 +6,7 @@ from keras.optimizers import Adam, SGD, RMSprop
 from keras.callbacks import ModelCheckpoint, Callback
 from model_ViT import VisionTransformer
 from data import dataGenerator
+from loss import iou_loss
 
 
 train_dir = '../data/onebox/train'
@@ -54,7 +55,7 @@ vit = VisionTransformer(
     patch_size=patch_size
 )
 
-vit.compile(Adam(learning_rate, 0.9, 0.98, epsilon=1e-9))
+vit.compile(Adam(learning_rate, 0.9, 0.98, epsilon=1e-9), loss=iou_loss)
 
 vit.model.summary()
 

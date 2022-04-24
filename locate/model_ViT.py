@@ -9,7 +9,6 @@ from keras.callbacks import *
 from keras.initializers import *
 import tensorflow as tf
 
-from loss import iou_loss
 from metrics import iou_metric
 
 def gelu(x):
@@ -420,7 +419,7 @@ class VisionTransformer:
         self.mlp_head_output = Dense(num_classes, activation="sigmoid")
 
 
-    def compile(self, optimizer='adam', active_layers=999):
+    def compile(self, optimizer='adam', loss='mse', active_layers=999):
         src_seq_input = Input(shape=(self.image_size,self.image_size,self.channels), dtype='float32')
 
         src_seq = src_seq_input
@@ -443,7 +442,7 @@ class VisionTransformer:
         self.model = Model(src_seq_input, final_output)
 
         self.model.compile(
-            loss=iou_loss,
+            loss=loss,
             optimizer=optimizer,
             metrics=[iou_metric],
         )
