@@ -1,6 +1,5 @@
 # coding=utf-8
 
-import math
 import numpy as np
 import keras
 from keras.models import *
@@ -8,14 +7,6 @@ from keras.layers import *
 from keras.callbacks import *
 from keras.initializers import *
 import tensorflow as tf
-
-def gelu(x):
-    """
-    GELU activation, described in paper "Gaussian Error Linear Units (GELUs)"
-    https://arxiv.org/pdf/1606.08415.pdf
-    """
-    c = math.sqrt(2 / math.pi)
-    return 0.5 * x * (1 + K.tanh(c * (x + 0.044715 * K.pow(x, 3))))
 
 
 class LayerNormalization(Layer):
@@ -412,8 +403,8 @@ class VisionTransformer:
         self.encoder = SelfAttention(d_model, d_inner_hid, n_head, layers, dropout)
         self.decoder = Decoder(d_model, d_inner_hid, n_head, layers, dropout)
 
-        self.mlp_head_dense = Dense(d_inner_hid, activation=gelu)
-        self.mlp_head_dropout = Dropout(dropout)
+        self.mlp_head_dense = Dense(d_inner_hid, activation="relu")
+        self.mlp_head_dense2 = Dense(64, activation="relu")
         self.mlp_head_output = Dense(num_classes, activation="sigmoid")
 
 
@@ -434,7 +425,7 @@ class VisionTransformer:
         x = Lambda(lambda x:x[:,0])(enc_output)
 
         x = self.mlp_head_dense(x)
-        x = self.mlp_head_dropout(x)
+        x = self.mlp_head_dense2(x)
         final_output = self.mlp_head_output(x)
 
         self.model = Model(src_seq_input, final_output)
