@@ -341,7 +341,7 @@ class VitImgPatchLayer(Layer):
     def call(self, x):
         # 处理图片，分割
         batch_size = tf.shape(x)[0]
-        x = self.rescale(x)
+        #x = self.rescale(x) # 数据生成时已处理
         patches = self.extract_patches(x)
         x = self.patch_proj(patches)
         return x
