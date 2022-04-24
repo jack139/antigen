@@ -18,7 +18,7 @@ val_json = '../data/onebox/dev_json'
 
 input_size = (256,256)  # 模型输入图片尺寸
 batch_size = 32
-learning_rate = 5e-6
+learning_rate = 1e-5
 epochs = 30
 train_num = len(os.listdir(train_dir)) # 训练集 数量
 val_num = len(os.listdir(val_dir))
@@ -74,7 +74,7 @@ model_checkpoint = ModelCheckpoint(
     monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max'
 )
 
-vit.model.load_weights("locate_onebox_ViT_b32_e02_0.02981.h5")
+#vit.model.load_weights("locate_onebox_ViT_b32_e02_0.02981.h5")
 
 vit.model.fit_generator(train_generator,
     steps_per_epoch=train_steps_per_epoch,
