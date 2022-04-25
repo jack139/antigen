@@ -36,13 +36,13 @@ characters = [
     "neg_a2",  "neg_a5a",  "pos_a1a",  "pos_a2",  "pos_a4a",  "pos_a6",
     "neg_c5a",  "pos_c1a",  "pos_c2a",  "pos_c3a",  "pos_c4a", "pos_c5a",
     "neg_c5",  "pos_c1",  "pos_c2",  "pos_c3",  "pos_c4", "pos_c5",
-    "neg_d1.png",  "neg_d2.png",  "neg_d3.png",  "neg_d4.png",  
-    "neg_d5.png",  "neg_d6.png",  "neg_d7.png",  "pos_d8.png",
+    "neg_d1",  "neg_d2",  "neg_d3",  "neg_d4",  
+    "neg_d5",  "neg_d6",  "neg_d7",  "pos_d8",
 ]
 characters_p = [1/110]*110
 objects = [
     "none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D",
-    "id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10",
+    "id1-D", "id2-R", "id3-U", "id4-D", "id5-U", "id6-R", "id7-U", "id8-U", "id9-D", "id10-D",
 ]
 objects_p = [0.2] + [0.8/17]*17
 angels = [0, 90, 180, 270]
@@ -236,7 +236,7 @@ def generate_random_imgs(prefix, total_imgs):
     return 'ok'
 
 if __name__ == "__main__":
-    #generate_random_imgs('test', 200)
+    #generate_random_imgs('test', 20)
 
     # 多线程生成图片
     params = [ # prefix, image_count
