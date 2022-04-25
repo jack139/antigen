@@ -61,7 +61,7 @@ model_checkpoint = ModelCheckpoint(
     monitor='val_iou_metric',verbose=1, save_best_only=True, save_weights_only=True, mode='max'
 )
 
-#model.load_weights("./locate_onebox_resnet-fpn_b128_e15_0.84804.h5")
+model.load_weights("../ckpt/locate_onebox_resnet-fpn_b128_e28_0.89290.h5")
 
 model.fit_generator(train_generator,
     steps_per_epoch=train_steps_per_epoch,
