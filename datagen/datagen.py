@@ -154,8 +154,8 @@ def generate_image(background, character, object, file_name):
     yy = background_image.height//2-character_image.height//2
 
     coordinates = (
-        xx + np.random.randint(-abs(xx)//2, abs(xx)//2+1), ## 可能为 负数
-        yy + np.random.randint(-abs(yy)//2, abs(yy)//2+1)
+        xx + np.random.randint(-abs(xx), abs(xx)+1), ## 可能为 负数
+        yy + np.random.randint(-abs(yy), abs(yy)+1)
     ) #x, y
 
     background_image.paste(character_image, coordinates, mask=character_image)
