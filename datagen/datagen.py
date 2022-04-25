@@ -36,10 +36,15 @@ characters = [
     "neg_a2",  "neg_a5a",  "pos_a1a",  "pos_a2",  "pos_a4a",  "pos_a6",
     "neg_c5a",  "pos_c1a",  "pos_c2a",  "pos_c3a",  "pos_c4a", "pos_c5a",
     "neg_c5",  "pos_c1",  "pos_c2",  "pos_c3",  "pos_c4", "pos_c5",
+    "neg_d1.png",  "neg_d2.png",  "neg_d3.png",  "neg_d4.png",  
+    "neg_d5.png",  "neg_d6.png",  "neg_d7.png",  "pos_d8.png",
 ]
-characters_p = [1/102]*102
-objects = ["none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D"]
-objects_p = [0.4, 0.1, 0.05, 0.1, 0.05, 0.1, 0.1, 0.1]
+characters_p = [1/110]*110
+objects = [
+    "none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D",
+    "id1", "id2", "id3", "id4", "id5", "id6", "id7", "id8", "id9", "id10",
+]
+objects_p = [0.2] + [0.8/17]*17
 angels = [0, 90, 180, 270]
 angels_p = [0.25, 0.25, 0.25, 0.25]
 

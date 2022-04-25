@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          26.190476190476204,
+          308.33333333333337
+        ],
+        [
+          307.1428571428572,
+          633.3333333333334
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/pos_d8.png",
+  "imageData": null,
+  "imageHeight": 1022,
+  "imageWidth": 330
+}
