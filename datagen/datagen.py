@@ -37,9 +37,9 @@ characters = [
     "neg_c5a",  "pos_c1a",  "pos_c2a",  "pos_c3a",  "pos_c4a", "pos_c5a",
     "neg_c5",  "pos_c1",  "pos_c2",  "pos_c3",  "pos_c4", "pos_c5",
     "neg_d1",  "neg_d2",  "neg_d3",  "neg_d4",  
-    "neg_d5",  "neg_d6",  "neg_d7",  "pos_d8",
+    "neg_d5",  "neg_d6",  "neg_d7",  "pos_d8", "neg_d9",
 ]
-characters_p = [1/110]*110
+characters_p = [1/111]*111
 objects = [
     "none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D",
     "id1-D", "id2-R", "id3-U", "id4-D", "id5-U", "id6-R", "id7-U", "id8-U", "id9-D", "id10-D",
