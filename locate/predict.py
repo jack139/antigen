@@ -123,7 +123,7 @@ def draw_box(test_path, p1, iou=None, do_draw_box=True):
     crop_img = rotate_bound(crop_img, rotate_angle)
 
     basename = os.path.basename(test_path)
-    if '_' in basename:
+    if '_' in basename and len(basename.split('_'))>2:
         label = basename.split('_')[2][:3] # 格式 prefix_num_label.jpg
     else:
         label = ''
