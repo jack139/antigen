@@ -12,7 +12,8 @@ from datetime import datetime
 from tqdm import tqdm
 
 input_size = (256,256,3)
-json_path = '../datagen/plus/json'
+#json_path = '../datagen/plus/json'
+json_path = '../data/crop/train_json'
 output_path = './data/test'
 
 
@@ -27,7 +28,7 @@ if not os.path.exists(output_path):
 #model = get_model('vgg16', input_size=input_size, weights=None)
 #model.load_weights("../ckpt/locate_onebox_vgg16_b128_e30_157_0.90929.h5")
 model = get_model_fpn(input_size=input_size, weights=None) # fpn
-model.load_weights("../ckpt/locate_onebox_resnet-fpn_b128_e24_0.90891.h5")
+model.load_weights("../ckpt/locate_onebox_resnet-fpn_b128_e27_0.92282.h5")
 
 
 def read_img(test_path,target_size = (224,224)):

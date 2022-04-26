@@ -43,8 +43,9 @@ characters_p = [1/113]*113
 objects = [
     "none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D",
     "id1-D", "id2-R", "id3-U", "id4-D", "id5-U", "id6-R", "id7-U", "id8-U", "id9-D", "id10-D",
+    "id1-U", "id2-L", "id3-D", "id4-U", "id5-D", "id6-L", "id7-D", "id8-D", "id9-U", "id10-U",
 ]
-objects_p = [0.2] + [0.8/17]*17
+objects_p = [0.2] + [0.8/27]*27
 angels = [0, 90, 180, 270]
 angels_p = [0.25, 0.25, 0.25, 0.25]
 
