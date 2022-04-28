@@ -139,26 +139,39 @@ SM2加签结果（每次不同）：
 
 返回结果
 
-| 参数       | 必选 | 类型   | 说明                                              |
-| ---------- | ---- | ------ | ------------------------------------------------- |
-| result     | 是   | string | 识别结果：positive阳性、negative阴性、invalid无效 |
-| request_id | 是   | string | 此次请求id                                        |
+| 参数       | 必选 | 类型   | 说明                 |
+| ---------- | ---- | ------ | -------------------- |
+| result     | 是   | string | 粗分识别结果，见下表 |
+| comment    | 是   | string | 细分识别结果，见下表 |
+| request_id | 是   | string | 此次请求id           |
+
+> 识别结果说明：
+>
+> | result   | comment | 识别结果                     |
+> | -------- | ------- | ---------------------------- |
+> | positive | pos     | 阳性：C、T 均有标线          |
+> | negative | neg     | 阴性：仅 C 有标线            |
+> | invalid  | fal     | 无效：仅 T 有标线            |
+> | invalid  | nul     | 无效：C、T 均无标线          |
+> | invalid  | none    | 无效：未定位到 C、T 标线区域 |
+>
 
 返回示例
 
 ```json
 {
-    'appId': '66A095861BAE55F8735199DBC45D3E8E', 
-    'code': 0, 
-    'success': True, 
-    'signType': 'plain', 
-    'encType': 'plain', 
-    'data': {
-        'msg': 'success', 
-        'result': 'negative', 
-        'request_id': '22041814265675a198ffdf7eaafecb7e9724a56cdfd9'
+    "appId": "66A095861BAE55F8735199DBC45D3E8E", 
+    "code": 0, 
+    "success": true, 
+    "signType": "plain", 
+    "encType": "plain", 
+    "data": {
+        "msg": "success", 
+        "result": "negative", 
+        "comment": "neg",
+        "request_id": "22041814265675a198ffdf7eaafecb7e9724a56cdfd9"
     }, 
-    'timestamp': 1650263216
+    "timestamp": 1650263216
 }
 
 ```
