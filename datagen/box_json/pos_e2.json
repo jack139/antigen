@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          21.811320754716974,
+          349.88679245283015
+        ],
+        [
+          184.07547169811323,
+          526.3018867924528
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/pos_e2.png",
+  "imageData": null,
+  "imageHeight": 806,
+  "imageWidth": 200
+}
