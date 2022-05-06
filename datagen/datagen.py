@@ -38,7 +38,7 @@ characters = [
     "neg_c5",  "pos_c1",  "pos_c2",  "pos_c3",  "pos_c4", "pos_c5",
     "neg_d1",  "neg_d2",  "neg_d3",  "neg_d4",  "pos_d4", 
     "neg_d5",  "neg_d6",  "neg_d7",  "pos_d8", "neg_d9", "pos_d9",
-    "neg_e3",  "neg_e4",  "pos_e1b",  "pos_e1",  "pos_e2b",  "pos_e2.png",
+    "neg_e3",  "neg_e4",  "pos_e1b",  "pos_e1",  "pos_e2b",  "pos_e2",
 ]
 characters_p = [1/119]*119
 objects = [
