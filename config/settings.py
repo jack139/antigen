@@ -33,6 +33,8 @@ SAVE_IMAGE_PATH = '/tmp/antigen'
 # dispatcher 中 最大线程数
 MAX_DISPATCHER_WORKERS = 8
 
+# 本地启动的 dispatcher id, 必须为从 1 开始整数, 可同时启动多个
+LOCAL_DISPATCHER_QUEUE_ID = [ 1 ]
 
 ############# appid - appsecret
 

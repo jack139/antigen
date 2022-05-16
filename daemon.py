@@ -6,7 +6,7 @@
 import sys
 import time, shutil, os
 from api.utils import helper
-from config.settings import REDIS_CONFIG
+from config.settings import LOCAL_DISPATCHER_QUEUE_ID
 
 
 APP_DIR=''
@@ -49,8 +49,8 @@ if __name__=='__main__':
     #启动后台进程
     #
     kill_processor('%s/dispatcher' % APP_DIR)
-    for i in range(REDIS_CONFIG['REQUEST-QUEUE-NUM']):
-        start_processor('dispatcher', str(i+1))
+    for i in LOCAL_DISPATCHER_QUEUE_ID:
+        start_processor('dispatcher', str(i))
 
     try:    
         _count=_ins=0
@@ -61,8 +61,8 @@ if __name__=='__main__':
                 if pid==None:
                     # 进程已死, 重启进程
                     kill_processor('%s/dispatcher' % APP_DIR)
-                    for i in range(REDIS_CONFIG['REQUEST-QUEUE-NUM']):
-                        start_processor('dispatcher', str(i+1))
+                    for i in LOCAL_DISPATCHER_QUEUE_ID:
+                        start_processor('dispatcher', str(i))
                     _ins+=1
                     print("%s\tdispatcher restart" % helper.time_str())
 

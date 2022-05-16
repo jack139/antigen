@@ -100,7 +100,7 @@ if __name__ == '__main__':
     print('Request queue NO. ', queue_no)
 
     # 模型预热
-    #api_func.warm_up()
+    api_func.warm_up()
 
     sys.stdout.flush()
 

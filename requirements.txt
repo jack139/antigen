@@ -1,0 +1,13 @@
+Keras==2.3.1
+tensorflow==1.15.4
+h5py==2.10
+Flask==1.1.1
+Flask-Restful
+opencv-python==4.2.0.34
+Cython==0.29.21
+matplotlib==3.3.2
+Pillow==8.0.1
+gmssl==3.2.1
+redis==3.5.3
+tqdm
+urllib3
