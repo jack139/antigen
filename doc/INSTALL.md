@@ -95,4 +95,5 @@ shell/my_server 启停应用服务
 新建uwsgi文件链接，防止crond找不到
 ```
 ln -s /usr/local/bin/uwsgi /usr/bin/
+ln -s /usr/sbin/nginx /usr/bin/
 ```
