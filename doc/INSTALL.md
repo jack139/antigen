@@ -63,9 +63,18 @@ rm /etc/logrotate.d/nginx
 ## redis相关设置
 ```
 sysctl vm.overcommit_memory=1
-sysctl net.core.somaxconn=512
+sysctl net.core.somaxconn=1000
 echo never > /sys/kernel/mm/transparent_hugepage/enabled
 ```
+
+前两行可在/etc/sysctl.conf中增加
+```
+vm.overcommit_memory=1
+net.core.somaxconn=1000
+```
+然后执行 sysctl -p
+
+第三行放入/etc/rc.local
 
 
 
