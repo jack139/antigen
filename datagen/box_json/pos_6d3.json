@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          20.766355140186874,
+          379.4392523364486
+        ],
+        [
+          200.20560747663546,
+          581.3084112149533
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/pos_6d3.png",
+  "imageData": null,
+  "imageHeight": 802,
+  "imageWidth": 218
+}

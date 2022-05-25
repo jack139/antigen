@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          24.570093457943926,
+          266.3551401869159
+        ],
+        [
+          197.46728971962614,
+          489.7196261682243
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/nul_6b2.png",
+  "imageData": null,
+  "imageHeight": 802,
+  "imageWidth": 220
+}

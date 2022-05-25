@@ -39,8 +39,13 @@ characters = [
     "neg_d1",  "neg_d2",  "neg_d3",  "neg_d4",  "pos_d4", 
     "neg_d5",  "neg_d6",  "neg_d7",  "pos_d8", "neg_d9", "pos_d9",
     "neg_e3",  "neg_e4",  "pos_e1b",  "pos_e1",  "pos_e2b",  "pos_e2",
+
+    # 2022-05-25
+    "neg_6a1",  "neg_6a4",  "neg_6b3",  "neg_6c3",  "neg_6d2",  "neg_6e1",  "neg_6g2",  "nul_6d2",  "pos_6c2",
+    "neg_6a2",  "neg_6b1",  "neg_6b4",  "neg_6c4",  "neg_6d3",  "neg_6f1",  "neg_6h1",  "pos_6a1",  "pos_6d3",
+    "neg_6a3",  "neg_6b2",  "neg_6c2",  "neg_6d1",  "neg_6d4",  "neg_6g1",  "nul_6b2",  "pos_6b1",  "pos_6h1",
 ]
-characters_p = [1/119]*119
+characters_p = [1/146]*146
 objects = [
     "none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D",
     "id1-D", "id2-R", "id3-U", "id4-D", "id5-U", "id6-R", "id7-U", "id8-U", "id9-D", "id10-D",

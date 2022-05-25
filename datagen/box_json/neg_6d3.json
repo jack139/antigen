@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          3.7663551401868745,
+          374.7009345794392
+        ],
+        [
+          177.59813084112147,
+          576.5700934579439
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/neg_6d3.png",
+  "imageData": null,
+  "imageHeight": 800,
+  "imageWidth": 185
+}
