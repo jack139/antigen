@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          57.42857142857133,
+          1405.7142857142856
+        ],
+        [
+          718.1428571428569,
+          2162.8571428571427
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../imgs/plus3_077_neg.jpg",
+  "imageData": null,
+  "imageHeight": 3007,
+  "imageWidth": 750
+}
