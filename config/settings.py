@@ -10,7 +10,7 @@ LOCATE_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/locate_onebox_resnet-fpn_b128_
 
 
 # 模型预热图片 路径
-WARM_UP_IMAGES = '../warmup'
+WARM_UP_IMAGES = './warmup'
 
 # GPU 内存设置
 GPU_MEMORY_LOCATE = 0.00001

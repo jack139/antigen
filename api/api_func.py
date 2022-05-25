@@ -60,9 +60,6 @@ def detpos_check(request_id, b64_data):
     img = __load_image_b64(b64_data, remove_color=False, max_size=5000)
     h, w = img.shape[:2]
 
-    # 保存请求图片(原始的)
-    save_backlog('image', request_id, img)
-
     # 准备定位模型输入
     inputs = cv2.resize(img, predict_flow.locate_input_size[:2], interpolation = cv2.INTER_AREA)
     inputs = inputs / 255.
@@ -78,8 +75,11 @@ def detpos_check(request_id, b64_data):
         crop_img = np.reshape(crop_img,(1,)+crop_img.shape)
         _, result = predict_flow.detpos_predict(crop_img)
 
-    # 保存结果
-    save_backlog('text', request_id, result)
+    if result!='neg': # 不保存 neg 的结果，太多了！
+        # 保存请求图片(原始的)
+        save_backlog('image', request_id, img)
+        # 保存结果
+        save_backlog('text', request_id, result)
 
     #print('[Time taken: {!s}]'.format(datetime.now() - start_time))
     return result
