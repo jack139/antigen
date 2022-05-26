@@ -1,6 +1,6 @@
 # coding=utf-8
 
-import os, sys, glob
+import os, sys, glob, shutil
 os.environ["TF_FORCE_GPU_ALLOW_GROWTH"] = "true"
 
 import json
@@ -153,15 +153,32 @@ if __name__ == '__main__':
         print("usage: python %s <img_path>"%sys.argv[0])
         sys.exit(2)
 
-    inputs, h, w = read_img(sys.argv[1], target_size=locate_input_size[:2])
-    p1, pred = locate_predict(inputs, h, w)
-    img = cv2.imread(sys.argv[1])
-    crop_img = crop_box(img, p1)
-    if crop_img is None:  # 没找到试剂盒
-        print("Nothing found!")
+    if os.path.isdir(sys.argv[1]):
+        file_list = glob.glob(sys.argv[1]+'/*')
     else:
-        cv2.imwrite(f'data/crop_{os.path.basename(sys.argv[1])}', crop_img)
-        crop_img = cv2.resize(crop_img, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
-        crop_img = np.reshape(crop_img,(1,)+crop_img.shape)
-        detpos_pred = detpos_predict(crop_img)
-        print(detpos_pred)
+        file_list = [sys.argv[1]]
+
+    for ff in file_list:
+        filepath, basename = os.path.split(ff)
+        filename, ext = os.path.splitext(basename)
+
+        if ext.lower() not in ['.png', '.jpg', '.jpeg']:
+            print('--->', ff, 'is not a IMAGE.')
+            continue
+
+        inputs, h, w = read_img(ff, target_size=locate_input_size[:2])
+        p1, pred = locate_predict(inputs, h, w)
+        img = cv2.imread(ff)
+        crop_img = crop_box(img, p1)
+        if crop_img is None:  # 没找到试剂盒
+            print("Nothing found!")
+        else:
+            os.makedirs(os.path.join(filepath, 'result'), exist_ok=True)
+            # 保存截图
+            cv2.imwrite(os.path.join(filepath, 'result', f'crop_{basename}'), crop_img)
+            crop_img = cv2.resize(crop_img, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
+            crop_img = np.reshape(crop_img,(1,)+crop_img.shape)
+            detpos_pred = detpos_predict(crop_img)
+            # 复制结果
+            shutil.copyfile(ff, os.path.join(filepath, 'result', f'{detpos_pred[1]}_{filename}{ext}'))
+            print(basename, detpos_pred[0][0], detpos_pred[1])
