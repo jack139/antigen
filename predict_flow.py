@@ -162,6 +162,9 @@ if __name__ == '__main__':
         filepath, basename = os.path.split(ff)
         filename, ext = os.path.splitext(basename)
 
+        # 结果目录
+        os.makedirs(os.path.join(filepath, 'result'), exist_ok=True)
+
         if ext.lower() not in ['.png', '.jpg', '.jpeg']:
             print('--->', ff, 'is not a IMAGE.')
             continue
@@ -171,14 +174,15 @@ if __name__ == '__main__':
         img = cv2.imread(ff)
         crop_img = crop_box(img, p1)
         if crop_img is None:  # 没找到试剂盒
+            result = 'none'
             print("Nothing found!")
         else:
-            os.makedirs(os.path.join(filepath, 'result'), exist_ok=True)
             # 保存截图
             cv2.imwrite(os.path.join(filepath, 'result', f'crop_{basename}'), crop_img)
             crop_img = cv2.resize(crop_img, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
             crop_img = np.reshape(crop_img,(1,)+crop_img.shape)
             detpos_pred = detpos_predict(crop_img)
-            # 复制结果
-            shutil.copyfile(ff, os.path.join(filepath, 'result', f'{detpos_pred[1]}_{filename}{ext}'))
-            print(basename, detpos_pred[0][0], detpos_pred[1])
+            result = detpos_pred[1]
+            print(basename, detpos_pred[0][0], result)
+        # 复制结果
+        shutil.copyfile(ff, os.path.join(filepath, 'result', f'{result}_{filename}{ext}'))
