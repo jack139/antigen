@@ -15,7 +15,7 @@ from keras.models import Model
 
 input_size = (128,128,3) 
 
-id2label = {0 : 'fal', 1: 'neg', 2 : 'nul', 3 : 'pos'}
+id2label = {0 : 'fal', 1: 'neg', 2 : 'non', 3 : 'nul', 4 : 'pos'}
 
 # create the base pre-trained model
 base_model = VGG16(weights=None, input_shape=input_size, include_top=False)
@@ -28,12 +28,12 @@ x = GlobalAveragePooling2D()(x)
 #x = Dropout(0.2)(x)
 #x = Dense(32, activation='relu')(x)
 # and a logistic layer 
-predictions = Dense(4, activation='softmax')(x)
+predictions = Dense(5, activation='softmax')(x)
 
 # this is the model we will train
 model = Model(inputs=base_model.input, outputs=predictions)
 
-model.load_weights("../ckpt/detpos_onebox_vgg16_b512_e07_0.99898.h5")
+model.load_weights("../ckpt/detpos_5labels_vgg16_b512_e07_0.99898.h5")
 
 def read_img(test_path,target_size = (224,224)):
     img = cv2.imread(test_path)

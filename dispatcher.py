@@ -33,6 +33,7 @@ def process_api(request_id, request_msg):
         if request['api']=='detpos_check': # 识别试剂盒
             r = api_func.detpos_check(request_id, request['image'])
             # 准备结果
+            r = 'none' if r=='non' else r
             if r in result_map.keys():
                 r2 = result_map[r]
             else:

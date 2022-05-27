@@ -55,6 +55,7 @@ test_generator = test_datagen.flow_from_directory(
 
 # create the base pre-trained model
 base_model = VGG16(weights='imagenet', input_shape=input_size, include_top=False)
+#base_model = VGG16(weights=None, input_shape=input_size, include_top=False)  # only for test
 #base_model = ResNet50V2(weights='imagenet', input_shape=input_size, include_top=False)
 
 
@@ -65,7 +66,7 @@ x = GlobalAveragePooling2D()(x)
 #x = Dense(512, activation='relu')(x)
 #x = Dropout(0.2)(x)
 #x = Dense(32, activation='relu')(x)
-predictions = Dense(4, activation='softmax')(x)
+predictions = Dense(5, activation='softmax')(x)
 
 # this is the model we will train
 model = Model(inputs=base_model.input, outputs=predictions)
@@ -84,11 +85,11 @@ model.summary()
 print(train_generator.class_indices)
 
 model_checkpoint = ModelCheckpoint(
-    "detpos_onebox_%s_b%d_e{epoch:02d}_{val_categorical_accuracy:.5f}.h5"%('vgg16',batch_size), 
+    "detpos_5labels_%s_b%d_e{epoch:02d}_{val_categorical_accuracy:.5f}.h5"%('vgg16',batch_size), 
     monitor='val_categorical_accuracy',verbose=1, save_best_only=True, 
     save_weights_only=True, mode='max')
 
-#model.load_weights("./detpos_onebox_vgg16_b512_e04_0.99650.h5")
+#model.load_weights("./detpos_5labels_vgg16_b512_e04_0.99650.h5")
 
 # train the model on the new data for a few epochs
 model.fit(train_generator,

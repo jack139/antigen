@@ -33,7 +33,7 @@ session = tf.Session(graph=graph, config=config)
 
 locate_input_size = (256,256,3)
 detpos_input_size = (128,128,3) 
-id2label = {0 : 'fal', 1: 'neg', 2 : 'nul', 3 : 'pos'}
+id2label = {0 : 'fal', 1: 'neg', 2 : 'non', 3 : 'nul', 4 : 'pos'}
 
 with graph.as_default():
     with session.as_default():
@@ -48,7 +48,7 @@ with graph.as_default():
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
         #x = Dense(512, activation='relu')(x)
-        predictions = Dense(4, activation='softmax')(x)
+        predictions = Dense(5, activation='softmax')(x)
         detpos_model = Model(inputs=base_model.input, outputs=predictions)
         detpos_model.load_weights(DETPOS_WEIGHTS)
         print('Detpos model load_weights: ', DETPOS_WEIGHTS)
