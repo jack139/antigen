@@ -122,11 +122,11 @@ def crop_box(img, p1):
 
 
 def locate_predict(inputs, h, w): # h,w 为原始图片的 尺寸
-    start_time = datetime.now()
+    #start_time = datetime.now()
     with graph.as_default(): # 解决多线程不同模型时，keras或tensorflow冲突的问题
         with session.as_default():
             results = locate_model.predict(inputs)
-    print('[Time taken: {!s}]'.format(datetime.now() - start_time))
+    #print('[Time taken: {!s}]'.format(datetime.now() - start_time))
 
     p1 = (
         results[0][0]*w,
@@ -139,11 +139,11 @@ def locate_predict(inputs, h, w): # h,w 为原始图片的 尺寸
 
 
 def detpos_predict(inputs): 
-    start_time = datetime.now()
+    #start_time = datetime.now()
     with graph.as_default(): # 解决多线程不同模型时，keras或tensorflow冲突的问题
         with session.as_default():
             results = detpos_model.predict(inputs)
-    print('[Time taken: {!s}]'.format(datetime.now() - start_time))
+    #print('[Time taken: {!s}]'.format(datetime.now() - start_time))
 
     return results, id2label[results.argmax()]
 
@@ -158,7 +158,7 @@ if __name__ == '__main__':
     else:
         file_list = [sys.argv[1]]
 
-    for ff in file_list:
+    for ff in tqdm(file_list):
         filepath, basename = os.path.split(ff)
         filename, ext = os.path.splitext(basename)
 
@@ -172,17 +172,20 @@ if __name__ == '__main__':
         inputs, h, w = read_img(ff, target_size=locate_input_size[:2])
         p1, pred = locate_predict(inputs, h, w)
         img = cv2.imread(ff)
-        crop_img = crop_box(img, p1)
-        if crop_img is None:  # 没找到试剂盒
+        crop_img0 = crop_box(img, p1)
+        if crop_img0 is None:  # 没找到试剂盒
             result = 'none'
-            print("Nothing found!")
+            #print("Nothing found!")
+            # 复制结果
+            shutil.copyfile(ff, os.path.join(filepath, 'result', f'{result}_{filename}{ext}'))
         else:
-            # 保存截图
-            cv2.imwrite(os.path.join(filepath, 'result', f'crop_{basename}'), crop_img)
-            crop_img = cv2.resize(crop_img, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
+            crop_img = cv2.resize(crop_img0, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
             crop_img = np.reshape(crop_img,(1,)+crop_img.shape)
             detpos_pred = detpos_predict(crop_img)
             result = detpos_pred[1]
-            print(basename, detpos_pred[0][0], result)
-        # 复制结果
-        shutil.copyfile(ff, os.path.join(filepath, 'result', f'{result}_{filename}{ext}'))
+            #print(basename, detpos_pred[0][0], result)
+            # 保存截图
+            cv2.imwrite(os.path.join(filepath, 'result', f'crop_{result}_{basename}'), crop_img0)
+
+            # 复制结果
+            #shutil.copyfile(ff, os.path.join(filepath, 'result', f'{result}_{filename}{ext}'))
