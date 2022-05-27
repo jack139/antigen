@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          143.0,
+          585.0625
+        ],
+        [
+          246.125,
+          714.75
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../imgs/plus4_013_neg.jpg",
+  "imageData": null,
+  "imageHeight": 1333,
+  "imageWidth": 750
+}
