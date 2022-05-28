@@ -16,12 +16,12 @@ from keras.callbacks import ModelCheckpoint
 freeze = False # 是否冻结 CNN 模型
 input_size = (128,128,3) # 对 crop 数据 128就够了
 batch_size = 512
-learning_rate = 2e-5 # 1e-4 8e-5
-train_num = 20387
+learning_rate = 4e-5 # 1e-4 8e-5
+train_num = 20379
 dev_num = 2008
 train_steps_per_epoch = train_num // batch_size + 1 
 dev_steps_per_epoch = dev_num // batch_size + 1 
-epochs = 20
+epochs = 10
 train_dir = '../data/crop_train'
 test_dir = '../data/crop_dev'
 
@@ -89,7 +89,7 @@ model_checkpoint = ModelCheckpoint(
     monitor='val_categorical_accuracy',verbose=1, save_best_only=True, 
     save_weights_only=True, mode='max')
 
-#model.load_weights("./detpos_5labels_vgg16_b512_e04_0.99650.h5")
+model.load_weights("../ckpt/detpos_5labels_vgg16_b512_e06_0.99700.h5")
 
 # train the model on the new data for a few epochs
 model.fit(train_generator,
