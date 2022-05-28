@@ -63,4 +63,5 @@ gcc -fPIC -shared -o libsm3.so sm3.c
 6. 使用locate模型跑4/5生成的数据，生成实际detpos训练数据（locate/predict.py）
 7. 检查各分类结果，将iou较小的数据归入nul
 8. 加入plus/detpos_imgs数据
-9. 训练detpos模型（detpos/train_net.py）
+9. 训练数据调整画布（pad_img.py）
+10. 训练detpos模型（detpos/train_net.py）
