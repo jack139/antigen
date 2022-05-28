@@ -17,7 +17,7 @@ from keras.models import Model
 
 import tensorflow as tf
 
-from datagen.pad_img import resizeAndPad
+from pad_img import resizeAndPad
 from config.settings import DETPOS_WEIGHTS, LOCATE_WEIGHTS, GPU_MEMORY_LOCATE, GPU_RUN_LOCATE
 
 
@@ -192,4 +192,4 @@ if __name__ == '__main__':
             cv2.imwrite(os.path.join(filepath, 'result', f'crop_{result}_{basename}'), crop_img0)
 
             # 复制结果
-            #shutil.copyfile(ff, os.path.join(filepath, 'result', f'{result}_{filename}{ext}'))
+            shutil.copyfile(ff, os.path.join(filepath, 'result', f'{result}_{filename}{ext}'))

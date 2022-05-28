@@ -16,12 +16,12 @@ from keras.callbacks import ModelCheckpoint
 freeze = False # 是否冻结 CNN 模型
 input_size = (128,128,3) # 对 crop 数据 128就够了
 batch_size = 512
-learning_rate = 4e-5 # 1e-4 8e-5
-train_num = 20539
-dev_num = 2014
+learning_rate = 2e-5 # 1e-4 8e-5
+train_num = 20387
+dev_num = 2008
 train_steps_per_epoch = train_num // batch_size + 1 
 dev_steps_per_epoch = dev_num // batch_size + 1 
-epochs = 10
+epochs = 20
 train_dir = '../data/crop_train'
 test_dir = '../data/crop_dev'
 

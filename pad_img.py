@@ -55,7 +55,7 @@ if __name__ == '__main__':
         sys.exit(2)
 
     if os.path.isdir(sys.argv[1]):
-        file_list = glob.glob(sys.argv[1]+'/*/*')
+        file_list = glob.glob(sys.argv[1]+'/*')
     else:
         file_list = [sys.argv[1]]
 
