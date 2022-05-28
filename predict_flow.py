@@ -16,7 +16,10 @@ from keras.layers import Dense, GlobalAveragePooling2D, Dropout
 from keras.models import Model
 
 import tensorflow as tf
+
+from datagen.pad_img import resizeAndPad
 from config.settings import DETPOS_WEIGHTS, LOCATE_WEIGHTS, GPU_MEMORY_LOCATE, GPU_RUN_LOCATE
+
 
 # GPU内存控制
 gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=GPU_MEMORY_LOCATE)
@@ -179,7 +182,8 @@ if __name__ == '__main__':
             # 复制结果
             shutil.copyfile(ff, os.path.join(filepath, 'result', f'{result}_{filename}{ext}'))
         else:
-            crop_img = cv2.resize(crop_img0, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
+            crop_img = resizeAndPad(crop_img0)
+            crop_img = cv2.resize(crop_img, detpos_input_size[:2], interpolation = cv2.INTER_AREA)
             crop_img = np.reshape(crop_img,(1,)+crop_img.shape)
             detpos_pred = detpos_predict(crop_img)
             result = detpos_pred[1]

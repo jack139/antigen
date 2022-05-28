@@ -6,7 +6,7 @@
 DETPOS_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/detpos_5labels_vgg16_b512_e06_0.99501.h5'
 
 # locate 预训练权重的路径
-LOCATE_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/locate_onebox_resnet-fpn_b128_e08_0.93630.h5'
+LOCATE_WEIGHTS = '/home/tao/Codes/cv/antigen/ckpt/locate_onebox_resnet-fpn_b128_e18_0.93912.h5'
 
 
 # 模型预热图片 路径
