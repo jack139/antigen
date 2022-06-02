@@ -1,0 +1,26 @@
+{
+  "version": "5.0.1",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "box",
+      "points": [
+        [
+          290.6829268292683,
+          186.77235772357724
+        ],
+        [
+          386.6178861788618,
+          308.7235772357724
+        ]
+      ],
+      "group_id": null,
+      "shape_type": "rectangle",
+      "flags": {}
+    }
+  ],
+  "imagePath": "../characters/neg_7f.png",
+  "imageData": null,
+  "imageHeight": 600,
+  "imageWidth": 628
+}

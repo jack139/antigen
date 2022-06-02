@@ -22,7 +22,7 @@ backgrounds = [
     "10",  "1",  "2",  "3",  "4",  "5",  "6",
     "7",  "8",  "9",  "a3",  "x1",  "x2",  "x9a",
 ]
-backgrounds_p = [1/28]*28
+backgrounds_p = [1/len(backgrounds)]*len(backgrounds)
 characters = [
     "fal1a",  "fal_4a",  "fal_7",  "neg_2",  "neg_4",  "nul_2a",  "nul3",  "nul_7a",  "pos_3aa",  "pos_4",
     "fal1",  "fal4a",  "neg_1a",  "neg_3a",  "neg_5a",  "nul2a",  "nul_4a",  "nul_7",  "pos_3ab",  "pos4",
@@ -44,8 +44,12 @@ characters = [
     "neg_6a1",  "neg_6a4",  "neg_6b3",  "neg_6c3",  "neg_6d2",  "neg_6e1",  "neg_6g2",  "nul_6d2",  "pos_6c2",
     "neg_6a2",  "neg_6b1",  "neg_6b4",  "neg_6c4",  "neg_6d3",  "neg_6f1",  "neg_6h1",  "pos_6a1",  "pos_6d3",
     "neg_6a3",  "neg_6b2",  "neg_6c2",  "neg_6d1",  "neg_6d4",  "neg_6g1",  "nul_6b2",  "pos_6b1",  "pos_6h1",
+
+    # 2022-06-02
+    "fal_7f",  "neg_7a2",  "neg_7b",  "neg_7d",  "neg_7e",
+    "neg_7f",  "nul_7e",  "pos_7a2",  "pos_7b2",  "pos_7d",
 ]
-characters_p = [1/146]*146
+characters_p = [1/len(characters)]*len(characters)
 objects = [
     "none", "hand1-R", "hand2-L", "hand3-D", "hand4-L",  "hand5-R",  "hand6-U",  "hand7-D",
     "id1-D", "id2-R", "id3-U", "id4-D", "id5-U", "id6-R", "id7-U", "id8-U", "id9-D", "id10-D",
