@@ -28,7 +28,7 @@ if not os.path.exists(output_path):
 #model = get_model('vgg16', input_size=input_size, weights=None)
 #model.load_weights("../ckpt/locate_onebox_vgg16_b128_e30_157_0.90929.h5")
 model = get_model_fpn(input_size=input_size, weights=None) # fpn
-model.load_weights("../ckpt/locate_onebox_resnet-fpn_b128_e08_0.93630.h5")
+model.load_weights("../ckpt/locate_onebox_resnet-fpn_b128_e24_0.94362.h5")
 
 
 def read_img(test_path,target_size = (224,224)):
